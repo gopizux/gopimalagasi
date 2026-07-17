@@ -14,11 +14,13 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         html {
             scroll-behavior: smooth;
             scrollbar-width: thin;
             transition: background 0.35s ease, color 0.35s ease;
         }
+
         /* --- LIGHT / DARK THEME VARIABLES --- */
         :root {
             --bg: #0a0a0a;
@@ -51,7 +53,16 @@
             --toggle-bg: #222;
             --toggle-hover: #333;
             --toggle-icon: #e0e0e0;
+            --blog-bg: #0f0f0f;
+            --blog-text: #d0d0d0;
+            --blog-border: #2a2a2a;
+            --blog-heading: #fff;
+            --blog-sub: #aaa;
+            --blog-code-bg: #1a1a1a;
+            --blog-blockquote: #2a2a2a;
+            --blog-strong: #ff6a33;
         }
+
         [data-theme="light"] {
             --bg: #f5f3f0;
             --bg-soft: #edeae6;
@@ -83,7 +94,16 @@
             --toggle-bg: #d5d0ca;
             --toggle-hover: #c5c0ba;
             --toggle-icon: #1a1a1a;
+            --blog-bg: #f0ede9;
+            --blog-text: #1a1a1a;
+            --blog-border: #d5d0ca;
+            --blog-heading: #0a0a0a;
+            --blog-sub: #555;
+            --blog-code-bg: #e5e0db;
+            --blog-blockquote: #ddd8d2;
+            --blog-strong: #cc3d00;
         }
+
         body {
             background: var(--bg);
             color: var(--text);
@@ -95,18 +115,22 @@
             overflow-x: hidden;
             transition: background 0.35s ease, color 0.35s ease;
         }
+
         html {
             background: var(--bg);
             scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
         }
+
         a {
             color: var(--text);
             text-decoration: none;
             transition: color 0.2s ease;
         }
+
         a:hover {
             color: var(--link-hover);
         }
+
         /* --- Background Doodles Layer --- */
         .bg-doodles {
             position: fixed;
@@ -115,6 +139,7 @@
             pointer-events: none;
             overflow: hidden;
         }
+
         .bg-doodles svg {
             position: absolute;
             fill: none;
@@ -122,6 +147,7 @@
             overflow: visible;
             will-change: transform;
         }
+
         .bg-doodles .stroke-orange {
             stroke: #ff4d00;
             opacity: var(--doodle-opacity);
@@ -137,6 +163,7 @@
             opacity: var(--doodle-grey);
             transition: stroke 0.35s ease, opacity 0.35s ease;
         }
+
         /* Positioning & motion per doodle */
         .doodle-dna {
             top: 4%;
@@ -194,6 +221,7 @@
             height: 48px;
             animation: spin 32s linear infinite;
         }
+
         /* Stroke drawing animation */
         .doodle-dna .strand,
         .doodle-ahelix path,
@@ -208,6 +236,7 @@
             stroke-dashoffset: 1400;
             animation: draw 18s ease-in-out infinite;
         }
+
         .doodle-benzene * {
             animation-delay: -4s;
         }
@@ -226,6 +255,7 @@
             animation-delay: -6s;
             animation-duration: 14s;
         }
+
         /* DNA rungs */
         .doodle-dna .rung {
             stroke-dasharray: 60;
@@ -247,6 +277,7 @@
         .doodle-dna .rung:nth-child(7) {
             animation-delay: 2.8s;
         }
+
         /* Molecule atom pulses */
         .doodle-mol circle,
         .doodle-small-1 circle {
@@ -281,6 +312,7 @@
         .doodle-small-1 circle:nth-of-type(4) {
             animation-delay: 2.4s;
         }
+
         /* Formula labels */
         .doodle-formula {
             position: absolute;
@@ -308,6 +340,7 @@
             animation-delay: -10s;
             font-size: 0.7rem;
         }
+
         /* Parallax offset via CSS custom properties */
         .doodle-dna {
             translate: calc(var(--mx, 0) * 6px) calc(var(--my, 0) * 6px);
@@ -336,6 +369,7 @@
         .doodle-formula {
             translate: calc(var(--mx, 0) * 16px) calc(var(--my, 0) * 16px);
         }
+
         /* Keyframes */
         @keyframes sway {
             0% {
@@ -425,6 +459,7 @@
                 box-shadow: 0 0 0 6px rgba(255, 77, 0, 0);
             }
         }
+
         /* --- Layout --- */
         .wrapper {
             position: relative;
@@ -436,6 +471,7 @@
             display: flex;
             flex-direction: column;
         }
+
         /* --- Header --- */
         header {
             display: flex;
@@ -446,16 +482,19 @@
             margin-bottom: 60px;
             transition: border-color 0.35s ease;
         }
+
         .logo {
             font-size: 1rem;
             font-weight: 700;
             letter-spacing: -0.02em;
         }
+
         .header-right {
             display: flex;
             align-items: center;
             gap: 18px;
         }
+
         .status {
             font-size: 0.75rem;
             color: var(--status-color);
@@ -466,6 +505,7 @@
             gap: 8px;
             transition: color 0.35s ease;
         }
+
         .status::before {
             content: '';
             display: block;
@@ -476,6 +516,28 @@
             animation: pulse-dot 2s ease-in-out infinite;
             transition: background 0.35s ease;
         }
+
+        /* --- Blog Nav Link --- */
+        .blog-nav-link {
+            font-size: 0.75rem;
+            color: var(--status-color);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 6px 14px;
+            border: 1px solid var(--bg-border);
+            border-radius: 20px;
+            transition: all 0.25s ease;
+            background: transparent;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .blog-nav-link:hover {
+            color: var(--link-hover);
+            border-color: var(--link-hover);
+            background: var(--list-hover-bg);
+        }
+
         /* --- Theme Toggle Button --- */
         .theme-toggle {
             background: var(--toggle-bg);
@@ -492,13 +554,16 @@
             padding: 0;
             position: relative;
         }
+
         .theme-toggle:hover {
             background: var(--toggle-hover);
             transform: scale(1.05);
         }
+
         .theme-toggle:active {
             transform: scale(0.94);
         }
+
         .theme-toggle svg {
             width: 22px;
             height: 22px;
@@ -509,11 +574,13 @@
             stroke-linejoin: round;
             transition: stroke 0.35s ease, transform 0.4s ease;
         }
+
         .theme-toggle .sun-icon,
         .theme-toggle .moon-icon {
             position: absolute;
             transition: opacity 0.35s ease, transform 0.4s ease;
         }
+
         [data-theme="dark"] .theme-toggle .sun-icon {
             opacity: 1;
             transform: rotate(0deg) scale(1);
@@ -522,6 +589,7 @@
             opacity: 0;
             transform: rotate(90deg) scale(0.5);
         }
+
         [data-theme="light"] .theme-toggle .sun-icon {
             opacity: 0;
             transform: rotate(-90deg) scale(0.5);
@@ -530,10 +598,12 @@
             opacity: 1;
             transform: rotate(0deg) scale(1);
         }
+
         /* --- Hero Section --- */
         .hero {
             margin-bottom: 100px;
         }
+
         h1 {
             font-size: clamp(3rem, 10vw, 7rem);
             font-weight: 700;
@@ -542,6 +612,7 @@
             text-transform: lowercase;
             margin-bottom: 40px;
         }
+
         .hero-sub {
             font-size: 1rem;
             color: var(--hero-sub);
@@ -549,11 +620,13 @@
             line-height: 1.7;
             transition: color 0.35s ease;
         }
+
         .hero-sub strong {
             color: var(--hero-strong);
             font-weight: 400;
             transition: color 0.35s ease;
         }
+
         /* --- Index / List Section --- */
         .section-label {
             font-size: 0.7rem;
@@ -564,9 +637,11 @@
             display: block;
             transition: color 0.35s ease;
         }
+
         .list-section {
             margin-bottom: 100px;
         }
+
         .list-item {
             display: flex;
             justify-content: space-between;
@@ -577,13 +652,16 @@
             transition: padding 0.25s ease, color 0.25s ease, border-color 0.35s ease;
             cursor: pointer;
         }
+
         .list-item:first-child {
             border-top: 1px solid var(--list-border);
         }
+
         .list-item:hover {
             padding-left: 12px;
             background: var(--list-hover-bg);
         }
+
         .item-title {
             font-size: clamp(1.2rem, 3vw, 2rem);
             font-weight: 700;
@@ -591,6 +669,7 @@
             text-transform: lowercase;
             flex: 1;
         }
+
         .item-meta {
             font-size: 0.75rem;
             color: var(--text-dim);
@@ -602,14 +681,17 @@
             gap: 4px;
             transition: color 0.35s ease;
         }
+
         .item-doi {
             font-size: 0.65rem;
             color: var(--text-dimmer);
             transition: color 0.2s ease;
         }
+
         .list-item:hover .item-doi {
             color: var(--link-hover);
         }
+
         /* --- Info Grid --- */
         .info-grid {
             display: grid;
@@ -620,6 +702,7 @@
             padding-top: 40px;
             transition: border-color 0.35s ease;
         }
+
         .info-col h3 {
             font-size: 0.7rem;
             color: var(--info-label);
@@ -629,12 +712,14 @@
             font-weight: 400;
             transition: color 0.35s ease;
         }
+
         .info-col p {
             font-size: 0.9rem;
             color: var(--info-text);
             line-height: 1.8;
             transition: color 0.35s ease;
         }
+
         /* --- Footer --- */
         footer {
             margin-top: auto;
@@ -649,14 +734,153 @@
             letter-spacing: 0.1em;
             transition: border-color 0.35s ease, color 0.35s ease;
         }
+
         footer a {
             color: var(--footer-text);
             margin-left: 24px;
             transition: color 0.2s ease;
         }
+
         footer a:hover {
             color: var(--link-hover);
         }
+
+        /* --- BLOG PAGE STYLES --- */
+        .blog-page {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .blog-page.active {
+            display: block;
+        }
+
+        .main-page.hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .blog-back-link {
+            display: inline-block;
+            margin-bottom: 40px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            border: none;
+            background: none;
+            font-family: inherit;
+            padding: 0;
+        }
+
+        .blog-back-link:hover {
+            color: var(--link-hover);
+        }
+
+        .blog-post {
+            background: var(--blog-bg);
+            padding: 48px 52px;
+            border-radius: 12px;
+            border: 1px solid var(--blog-border);
+            transition: background 0.35s ease, border-color 0.35s ease, color 0.35s ease;
+            color: var(--blog-text);
+        }
+
+        .blog-post h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            color: var(--blog-heading);
+            letter-spacing: -0.02em;
+        }
+
+        .blog-post .blog-date {
+            font-size: 0.8rem;
+            color: var(--blog-sub);
+            margin-bottom: 32px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .blog-post h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-top: 36px;
+            margin-bottom: 16px;
+            color: var(--blog-heading);
+        }
+
+        .blog-post h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-top: 28px;
+            margin-bottom: 10px;
+            color: var(--blog-heading);
+        }
+
+        .blog-post p {
+            margin-bottom: 18px;
+            line-height: 1.8;
+            color: var(--blog-text);
+        }
+
+        .blog-post strong {
+            color: var(--blog-strong);
+            font-weight: 600;
+        }
+
+        .blog-post ul,
+        .blog-post ol {
+            margin: 16px 0 20px 28px;
+            color: var(--blog-text);
+        }
+
+        .blog-post li {
+            margin-bottom: 8px;
+        }
+
+        .blog-post blockquote {
+            border-left: 3px solid var(--link-hover);
+            padding: 12px 24px;
+            margin: 24px 0;
+            background: var(--blog-blockquote);
+            border-radius: 0 6px 6px 0;
+            color: var(--blog-text);
+            font-style: italic;
+        }
+
+        .blog-post code {
+            background: var(--blog-code-bg);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: var(--blog-strong);
+        }
+
+        .blog-post .note {
+            margin-top: 32px;
+            padding: 16px 20px;
+            border: 1px solid var(--blog-border);
+            border-radius: 6px;
+            background: var(--blog-blockquote);
+            font-size: 0.9rem;
+            color: var(--blog-sub);
+        }
+
         /* --- Mobile --- */
         @media (max-width: 900px) {
             .doodle-small-1,
@@ -668,6 +892,12 @@
             .doodle-dna,
             .doodle-ahelix {
                 opacity: 0.55;
+            }
+            .blog-post {
+                padding: 28px 20px;
+            }
+            .blog-post h2 {
+                font-size: 1.6rem;
             }
         }
         @media (max-width: 600px) {
@@ -695,6 +925,7 @@
             }
             .header-right {
                 gap: 12px;
+                flex-wrap: wrap;
             }
             .status {
                 font-size: 0.65rem;
@@ -707,7 +938,22 @@
                 width: 18px;
                 height: 18px;
             }
+            .blog-nav-link {
+                font-size: 0.65rem;
+                padding: 4px 12px;
+            }
+            .blog-post {
+                padding: 20px 16px;
+            }
+            .blog-post h2 {
+                font-size: 1.3rem;
+            }
+            .blog-post ul,
+            .blog-post ol {
+                margin-left: 16px;
+            }
         }
+
         /* --- Reduced motion --- */
         @media (prefers-reduced-motion: reduce) {
             .bg-doodles svg,
@@ -734,7 +980,9 @@
     </style>
 </head>
 <body>
+
     <div class="bg-doodles" aria-hidden="true">
+
         <svg class="doodle doodle-dna" viewBox="0 0 100 400" xmlns="http://www.w3.org/2000/svg">
             <path class="strand stroke-orange" d="M 50 0 C 90 25, 90 75, 50 100 C 10 125, 10 175, 50 200 C 90 225, 90 275, 50 300 C 10 325, 10 375, 50 400"/>
             <path class="strand stroke-orange" d="M 50 0 C 10 25, 10 75, 50 100 C 90 125, 90 175, 50 200 C 10 225, 10 275, 50 300 C 90 325, 90 375, 50 400"/>
@@ -743,13 +991,16 @@
             <line class="rung stroke-grey" x1="22" y1="250" x2="78" y2="250"/>
             <line class="rung stroke-grey" x1="22" y1="350" x2="78" y2="350"/>
         </svg>
+
         <svg class="doodle doodle-benzene" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <polygon class="stroke-orange" points="50,8 88,30 88,70 50,92 12,70 12,30"/>
             <circle class="stroke-orange" cx="50" cy="50" r="22"/>
         </svg>
+
         <svg class="doodle doodle-ahelix" viewBox="0 0 100 360" xmlns="http://www.w3.org/2000/svg">
             <path class="stroke-orange" d="M 50 0 C 95 30, 5 60, 50 90 C 95 120, 5 150, 50 180 C 95 210, 5 240, 50 270 C 95 300, 5 330, 50 360"/>
         </svg>
+
         <svg class="doodle doodle-mol" viewBox="0 0 140 120" xmlns="http://www.w3.org/2000/svg">
             <line class="stroke-grey" x1="70" y1="60" x2="25"  y2="25"/>
             <line class="stroke-grey" x1="70" y1="60" x2="115" y2="25"/>
@@ -761,10 +1012,12 @@
             <circle class="stroke-grey"   cx="70"  cy="105" r="6"/>
             <circle class="stroke-grey"   cx="20"  cy="95"  r="6"/>
         </svg>
+
         <svg class="doodle doodle-beta" viewBox="0 0 220 70" xmlns="http://www.w3.org/2000/svg">
             <polyline class="stroke-orange" points="0,30 22,8 44,52 66,8 88,52 110,8 132,52 154,8 176,52 198,8 220,30"/>
             <polyline class="stroke-grey"   points="0,45 22,23 44,67 66,23 88,67 110,23 132,67 154,23 176,67 198,23 220,45"/>
         </svg>
+
         <svg class="doodle doodle-hex" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
             <polygon class="stroke-grey" points="70,10 120,38 120,98 70,126 20,98 20,38"/>
             <polygon class="stroke-grey" points="70,30 100,48 100,88 70,106 40,88 40,48"/>
@@ -775,6 +1028,7 @@
             <line class="stroke-grey" x1="20"  y1="98"  x2="40"  y2="88"/>
             <line class="stroke-grey" x1="20"  y1="38"  x2="40"  y2="48"/>
         </svg>
+
         <svg class="doodle doodle-small-1" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
             <line class="stroke-orange-dim" x1="40" y1="40" x2="15" y2="15"/>
             <line class="stroke-orange-dim" x1="40" y1="40" x2="65" y2="15"/>
@@ -784,157 +1038,276 @@
             <circle class="stroke-orange" cx="65" cy="15" r="5"/>
             <circle class="stroke-orange" cx="40" cy="68" r="5"/>
         </svg>
+
         <svg class="doodle doodle-small-2" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
             <polygon class="stroke-orange" points="35,8 60,22 60,52 35,66 10,52 10,22"/>
             <circle class="stroke-orange" cx="35" cy="37" r="14"/>
         </svg>
+
         <div class="doodle-formula formula-1">C₆H₁₂O₆</div>
         <div class="doodle-formula formula-2">5′-ATG-CGT-TAA-3′</div>
         <div class="doodle-formula formula-3">α-helix · 3.6 res/turn</div>
+
     </div>
+
     <div class="wrapper">
-        <header>
-            <div class="logo">Welcome Newbie, Make yourself comfortable!</div>
-            <div class="header-right">
-                <div class="status">Open to work | Collaborations</div>
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                    <svg class="sun-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="5"/>
-                        <line x1="12" y1="1" x2="12" y2="4"/>
-                        <line x1="12" y1="20" x2="12" y2="23"/>
-                        <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
-                        <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
-                        <line x1="1" y1="12" x2="4" y2="12"/>
-                        <line x1="20" y1="12" x2="23" y2="12"/>
-                        <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
-                        <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
-                    </svg>
-                    <svg class="moon-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                    </svg>
-                </button>
-            </div>
-        </header>
-        <section class="hero">
-            <h1>Gopi-<br />malagasi.</h1>
-            <p class="hero-sub">
-                Bioinformatics Doctoral student at Yogi Vemana University. Building pipelines, engineering protein variants, and finding honest signals in noisy biological data. <strong>Based in India.</strong>
-            </p>
-        </section>
-        <div class="list-section">
-            <span class="section-label">Completed Work</span>
-            <a href="https://doi.org/10.5281/zenodo.21355340" target="_blank" rel="noopener" class="list-item">
-                <span class="item-title">AminoSeqIndex</span>
-                <span class="item-meta">
-                    Zenodo — 2026
-                    <span class="item-doi">doi:10.5281/zenodo.21355340</span>
-                </span>
-            </a>
-            <a href="https://gopizux.github.io/synyca/" target="_blank" rel="noopener" class="list-item">
-                <span class="item-title">Synyca - an okayish synonym tool</span>
-                <span class="item-meta">2026</span>
-            </a>
-            <a href="https://github.com/gopizux/ffpe-omicsqc" target="_blank" rel="noopener" class="list-item">
-                <span class="item-title">ffpe-omicsqc | FFPE Artifact Detector for Multi-Omic Pipelines</span>
-                <span class="item-meta">2026</span>
-            </a>
-            <a href="https://github.com/gopizux" target="_blank" rel="noopener" class="list-item">
-                <span class="item-title">Disease Gene Identification in HCC</span>
-                <span class="item-meta">Major Project — 2025</span>
-            </a>
-            <a href="https://github.com/gopizux" target="_blank" rel="noopener" class="list-item">
-                <span class="item-title">Bulk Protein Modelling Pipeline</span>
-                <span class="item-meta">Oncosimis Biotech — 2025</span>
-            </a>
-            <a href="https://github.com/gopizux/Virtual-Affinity-Chromatography-Simulation" target="_blank" rel="noopener" class="list-item">
-                <span class="item-title">Protein A Chromatography Sim</span>
-                <span class="item-meta">In-silico Prototype — 2025</span>
-            </a>
-            <a href="https://github.com/gopizux/oncosimis-eln" target="_blank" rel="noopener" class="list-item">
-                <span class="item-title">OSB Electronic Lab Notebook (NAS)</span>
-                <span class="item-meta">PostgreSQL / Web — 2025</span>
-            </a>
-            <a href="https://gopizux.github.io/imagencoder/" target="_blank" rel="noopener" class="list-item">
-                <span class="item-title">imagencoder - a steganography encoder</span>
-                <span class="item-meta">2025</span>
-            </a>
-            <a href="https://github.com/gopizux" target="_blank" rel="noopener" class="list-item">
-                <span class="item-title">DEGs in Obesity & Diabetes</span>
-                <span class="item-meta">Minor Project — 2024</span>
-            </a>
-        </div>
-        <div class="info-grid">
-            <div class="info-col">
-                <h3>Stack</h3>
-                <p>
-                    R, Python, C, SQL<br />
-                    Keras, Cytoscape, SciPy<br />
-                    Linux (Ubuntu/Arch/Kali), Git
+
+        <div class="main-page" id="mainPage">
+            <header>
+                <div class="logo">Welcome Newbie, Make yourself comfortable!</div>
+                <div class="header-right">
+                    <div class="status">Open to work | Collaborations</div>
+                    <button class="blog-nav-link" id="blogNavBtn">Blog</button>
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                        <svg class="sun-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="4"/>
+                            <line x1="12" y1="20" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
+                            <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+                            <line x1="1" y1="12" x2="4" y2="12"/>
+                            <line x1="20" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
+                            <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+                        </svg>
+                        <svg class="moon-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <section class="hero">
+                <h1>Gopi-<br />malagasi.</h1>
+                <p class="hero-sub">
+                    Bioinformatics Doctoral student at Yogi Vemana University. Building pipelines, engineering protein variants, and finding honest signals in noisy biological data. <strong>Based in India.</strong>
                 </p>
+            </section>
+
+            <div class="list-section">
+                <span class="section-label">Completed Work</span>
+
+                <a href="https://doi.org/10.5281/zenodo.21355340" target="_blank" rel="noopener" class="list-item">
+                    <span class="item-title">AminoSeqIndex</span>
+                    <span class="item-meta">
+                        Zenodo — 2026
+                        <span class="item-doi">doi:10.5281/zenodo.21355340</span>
+                    </span>
+                </a>
+
+                <a href="https://gopizux.github.io/synyca/" target="_blank" rel="noopener" class="list-item">
+                    <span class="item-title">Synyca - an okayish synonym tool</span>
+                    <span class="item-meta">2026</span>
+                </a>
+
+                <a href="https://github.com/gopizux/ffpe-omicsqc" target="_blank" rel="noopener" class="list-item">
+                    <span class="item-title">ffpe-omicsqc | FFPE Artifact Detector for Multi-Omic Pipelines</span>
+                    <span class="item-meta">2026</span>
+                </a>
+
+                <a href="https://github.com/gopizux" target="_blank" rel="noopener" class="list-item">
+                    <span class="item-title">Disease Gene Identification in HCC</span>
+                    <span class="item-meta">Major Project — 2025</span>
+                </a>
+
+                <a href="https://github.com/gopizux" target="_blank" rel="noopener" class="list-item">
+                    <span class="item-title">Bulk Protein Modelling Pipeline</span>
+                    <span class="item-meta">Oncosimis Biotech — 2025</span>
+                </a>
+
+                <a href="https://github.com/gopizux/Virtual-Affinity-Chromatography-Simulation" target="_blank" rel="noopener" class="list-item">
+                    <span class="item-title">Protein A Chromatography Sim</span>
+                    <span class="item-meta">In-silico Prototype — 2025</span>
+                </a>
+
+                <a href="https://github.com/gopizux/oncosimis-eln" target="_blank" rel="noopener" class="list-item">
+                    <span class="item-title">OSB Electronic Lab Notebook (NAS)</span>
+                    <span class="item-meta">PostgreSQL / Web — 2025</span>
+                </a>
+
+                <a href="https://gopizux.github.io/imagencoder/" target="_blank" rel="noopener" class="list-item">
+                    <span class="item-title">imagencoder - a steganography encoder</span>
+                    <span class="item-meta">2025</span>
+                </a>
+
+                <a href="https://github.com/gopizux" target="_blank" rel="noopener" class="list-item">
+                    <span class="item-title">DEGs in Obesity & Diabetes</span>
+                    <span class="item-meta">Minor Project — 2024</span>
+                </a>
             </div>
-            <div class="info-col">
-                <h3>Path</h3>
-                <p>
-                    2025 — Present: Ph.D Researcher @ Yogi Vemana Univ.<br />
-                    06–11/2025: Research Associate @ Oncosimis Biotech<br />
-                    2020–2025: Integrated MSc Biotech & Bioinformatics
-                </p>
+
+            <div class="info-grid">
+                <div class="info-col">
+                    <h3>Stack</h3>
+                    <p>
+                        R, Python, C, SQL<br />
+                        Keras, Cytoscape, SciPy<br />
+                        Linux (Ubuntu/Arch/Kali), Git
+                    </p>
+                </div>
+                <div class="info-col">
+                    <h3>Path</h3>
+                    <p>
+                        2025 — Present: Ph.D Researcher @ Yogi Vemana Univ.<br />
+                        06–11/2025: Research Associate @ Oncosimis Biotech<br />
+                        2020–2025: Integrated MSc Biotech & Bioinformatics
+                    </p>
+                </div>
             </div>
+
+            <footer>
+                <span>Gopi © 2025</span>
+                <div>
+                    <a href="mailto:gopizux@gmail.com">Mail</a>
+                    <a href="https://github.com/gopizux" target="_blank" rel="noopener">Github</a>
+                    <a href="https://linkedin.com/in/gopizux" target="_blank" rel="noopener">LinkedIn</a>
+                </div>
+            </footer>
         </div>
-        <footer>
-            <span>Gopi © 2025</span>
-            <div>
-                <a href="mailto:gopizux@gmail.com">Mail</a>
-                <a href="https://github.com/gopizux" target="_blank" rel="noopener">Github</a>
-                <a href="https://linkedin.com/in/gopizux" target="_blank" rel="noopener">LinkedIn</a>
-            </div>
-        </footer>
+
+        <div class="blog-page" id="blogPage">
+            <button class="blog-back-link" id="blogBackBtn">← Back to home</button>
+
+            <article class="blog-post">
+                <h2>I Found a Massive Security Gap in Yogi Vemana University (www.yvu.edu.in) — And No Login Was Required to Grab Student Data</h2>
+                <span class="blog-date" id="blogDate"></span>
+
+                <p>During a recent penetration test on a state university's web infrastructure, I stumbled across some alarming security gaps. I want to share what I found to highlight how simple oversights can put real people at risk—but I'm intentionally leaving out specific names, exact URLs, and sensitive data to protect the students involved.</p>
+
+                <h3>How It Started</h3>
+                <p>I was doing some routine work on a state university here in India. Like a lot of educational institutions, they've built out a pretty large web presence with different subdomains handling their main site, online education portals, and examination systems.</p>
+                <p>I started with the basics: just mapping out their attack surface to see what was publicly visible. Within minutes, I had a good picture of their setup. They were running a pretty standard tech stack—Apache, PHP, and the CodeIgniter framework. Nothing unusual at all.</p>
+                <p>Then, I started digging a little deeper, and things got messy.</p>
+
+                <h3>What I Found</h3>
+
+                <h4>1. A Student Database Left Wide Open</h4>
+                <p>This was the one that made my jaw drop.</p>
+                <p>While exploring their online education portal, I noticed an endpoint designed to let super admins export student data into a spreadsheet. The massive flaw? There was absolutely no login required to access it.</p>
+                <p>I ran a single command to request that page, and it immediately downloaded a file to my computer. It contained records for over a hundred students.</p>
+                <p>I won't go into the exact fields, but the file contained deeply personal information. I'm talking full names, phone numbers, home addresses, family details, and complete education histories. Worst of all, it included highly sensitive national ID numbers (similar to a Social Security Number).</p>
+                <p>Let that sink in for a second. With one unauthenticated click, anyone on the internet could have downloaded enough information to ruin over a hundred people's lives through identity theft.</p>
+                <p>When I looked at how this could happen, the answer was depressingly simple. In the source code, the developer had written a function to pull all the student records from the database and serve them up, but they simply forgot to add the line of code that checks if the user is actually logged in. That's it. One missing line of code.</p>
+
+                <h4>2. Database Passwords Just Sitting There</h4>
+                <p>Next, I checked for a incredibly common mistake: looking for <code>.env</code> files. These are configuration files that tell the website how to connect to its database, and they are never supposed to be public.</p>
+                <p>Unfortunately, the servers were misconfigured, and I could view the <code>.env</code> files for multiple subdomains right in my browser. They contained the plaintext usernames and passwords for their databases.</p>
+                <p>Now, thankfully, the databases themselves weren't directly accessible from the outside internet. But leaving passwords sitting in plain text like that is a huge risk. If an attacker gets into the server another way, they have the keys to the kingdom.</p>
+
+                <h4>3. The Entire Source Code Was Exposed</h4>
+                <p>Every single subdomain I looked at had its <code>.git</code> directory exposed to the public. For non-tech folks, this is like leaving the master blueprint to your house taped to the front door. Anyone could have downloaded it and reconstructed the exact source code of the university's websites.</p>
+                <p>To make matters worse, it looked like a developer had accidentally pushed this exact same code—including those database passwords I just mentioned—to a public GitHub account. It was all just out there for the taking.</p>
+
+                <h4>4. Resetting Admin Passwords Without Verification</h4>
+                <p>On one of the admin panels, I found a password reset feature. Usually, if you forget your password, the system sends you an email or a text message to prove you are who you say you are.</p>
+                <p>This portal didn't do any of that. If you wanted to reset an admin's password, you just typed in their email address and picked a new password. No verification. No security questions. If you could guess or find an admin's email address, you owned their account.</p>
+
+                <h4>5. Anyone Could Make Themselves an Admin</h4>
+                <p>As if that wasn't enough, the registration page to create a new admin account was completely public. There was a field for an institutional ID, but there was zero approval process behind it. You could just type in an ID, create an account, and get admin privileges.</p>
+
+                <h4>6. Leaving the Debug Mode On</h4>
+                <p>Finally, one of the portals was still running in "development mode" instead of "production mode." Because of this, a special debug toolbar was visible to anyone who visited the site. It freely gave away the exact software versions they were using, the internal file paths on their server, and all the hidden routes in the application. It's a goldmine for someone looking to attack the site.</p>
+
+                <h3>The Real-World Impact</h3>
+                <p>It's easy to look at this as just a "tech problem," but I want to emphasize who actually gets hurt here: the students.</p>
+                <p>Over a hundred real people had their most sensitive data exposed—data that could be used to open fake bank accounts, take out loans, or commit identity fraud. If you ever find out your data was caught up in a leak like this, you need to act fast: monitor your financial accounts, check your national ID usage history, and lock down your biometric data if possible.</p>
+
+                <h3>My Takeaway</h3>
+                <p>The craziest part about all of this? None of these were sophisticated, zero-day hacks.</p>
+                <p>The critical data leak was caused by a single missing line of code. The rest were basic, fundamental security hygiene failures: leaving config files public, exposing source code, and forgetting to turn off debug mode.</p>
+                <p>The good news is that all of these issues are incredibly easy to fix—most of them could be patched in a single afternoon. The bad news is that until someone actually sits down and does the work, student data is sitting out there, just one click away from being abused.</p>
+
+                <div class="note">
+                    <strong>Note:</strong> I have chosen to omit the specific university name, exact URLs, developer names, and database details from this write-up to prevent any malicious actors from misusing this information.
+                </div>
+            </article>
+        </div>
+
     </div>
+
     <script>
         // --- Theme Toggle ---
         (function() {
             const toggle = document.getElementById('themeToggle');
             const html = document.documentElement;
-            // Check stored preference or system preference
+
             const stored = localStorage.getItem('theme');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             let currentTheme = stored || (prefersDark ? 'dark' : 'light');
-            // Apply theme
+
             function setTheme(theme) {
                 html.setAttribute('data-theme', theme);
                 currentTheme = theme;
                 localStorage.setItem('theme', theme);
             }
-            // Toggle
+
             function toggleTheme() {
                 const next = currentTheme === 'dark' ? 'light' : 'dark';
                 setTheme(next);
             }
+
             toggle.addEventListener('click', toggleTheme);
-            // Initial apply
             setTheme(currentTheme);
-            // Listen for system changes (optional)
+
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
                 if (!localStorage.getItem('theme')) {
                     setTheme(e.matches ? 'dark' : 'light');
                 }
             });
         })();
+
+        // --- Blog Navigation ---
+        (function() {
+            const mainPage = document.getElementById('mainPage');
+            const blogPage = document.getElementById('blogPage');
+            const blogNavBtn = document.getElementById('blogNavBtn');
+            const blogBackBtn = document.getElementById('blogBackBtn');
+
+            function showBlog() {
+                mainPage.classList.add('hidden');
+                blogPage.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function showMain() {
+                mainPage.classList.remove('hidden');
+                blogPage.classList.remove('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            blogNavBtn.addEventListener('click', showBlog);
+            blogBackBtn.addEventListener('click', showMain);
+        })();
+
+        // --- Set today's date on blog post ---
+        (function() {
+            const dateEl = document.getElementById('blogDate');
+            if (dateEl) {
+                const now = new Date();
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                dateEl.textContent = now.toLocaleDateString('en-US', options);
+            }
+        })();
+
         // --- Subtle mouse parallax — moves doodles slightly based on cursor position ---
         (function() {
             const bg = document.querySelector('.bg-doodles');
             if (!bg) return;
+
             let tmx = 0,
                 tmy = 0,
                 mx = 0,
                 my = 0;
             let raf = null;
+
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
             function onMove(e) {
                 tmx = (e.clientX / window.innerWidth - 0.5) * 2;
                 tmy = (e.clientY / window.innerHeight - 0.5) * 2;
                 if (!raf) raf = requestAnimationFrame(tick);
             }
+
             function tick() {
                 mx += (tmx - mx) * 0.06;
                 my += (tmy - my) * 0.06;
@@ -946,6 +1319,7 @@
                     raf = null;
                 }
             }
+
             if (!reduceMotion) {
                 window.addEventListener('mousemove', onMove, { passive: true });
                 window.addEventListener('touchmove', (e) => {
@@ -958,5 +1332,6 @@
             }
         })();
     </script>
+
 </body>
 </html>
