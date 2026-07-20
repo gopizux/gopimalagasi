@@ -530,6 +530,8 @@
             background: transparent;
             cursor: pointer;
             font-family: inherit;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .blog-nav-link:hover {
@@ -1057,7 +1059,7 @@
                 <div class="logo">Welcome Newbie, Make yourself comfortable!</div>
                 <div class="header-right">
                     <div class="status">Open to work | Collaborations</div>
-                    <button class="blog-nav-link" id="blogNavBtn">Blog</button>
+                    <a href="/gopimalagasi/blog/" class="blog-nav-link">Blog</a>
                     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                         <svg class="sun-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="12" cy="12" r="5"/>
@@ -1165,62 +1167,6 @@
             </footer>
         </div>
 
-        <div class="blog-page" id="blogPage">
-            <button class="blog-back-link" id="blogBackBtn">← Back to home</button>
-
-            <article class="blog-post">
-                <h2>I Found a Massive Security Gap in Yogi Vemana University (www.yvu.edu.in) — And No Login Was Required to Grab Student Data</h2>
-                <span class="blog-date" id="blogDate"></span>
-
-                <p>During a recent penetration test on a state university's web infrastructure, I stumbled across some alarming security gaps. I want to share what I found to highlight how simple oversights can put real people at risk—but I'm intentionally leaving out specific names, exact URLs, and sensitive data to protect the students involved.</p>
-
-                <h3>How It Started</h3>
-                <p>I was doing some routine work on a state university here in India. Like a lot of educational institutions, they've built out a pretty large web presence with different subdomains handling their main site, online education portals, and examination systems.</p>
-                <p>I started with the basics: just mapping out their attack surface to see what was publicly visible. Within minutes, I had a good picture of their setup. They were running a pretty standard tech stack—Apache, PHP, and the CodeIgniter framework. Nothing unusual at all.</p>
-                <p>Then, I started digging a little deeper, and things got messy.</p>
-
-                <h3>What I Found</h3>
-
-                <h4>1. A Student Database Left Wide Open</h4>
-                <p>This was the one that made my jaw drop.</p>
-                <p>While exploring their online education portal, I noticed an endpoint designed to let super admins export student data into a spreadsheet. The massive flaw? There was absolutely no login required to access it.</p>
-                <p>I ran a single command to request that page, and it immediately downloaded a file to my computer. It contained records for over a hundred students.</p>
-                <p>I won't go into the exact fields, but the file contained deeply personal information. I'm talking full names, phone numbers, home addresses, family details, and complete education histories. Worst of all, it included highly sensitive national ID numbers (similar to a Social Security Number).</p>
-                <p>Let that sink in for a second. With one unauthenticated click, anyone on the internet could have downloaded enough information to ruin over a hundred people's lives through identity theft.</p>
-                <p>When I looked at how this could happen, the answer was depressingly simple. In the source code, the developer had written a function to pull all the student records from the database and serve them up, but they simply forgot to add the line of code that checks if the user is actually logged in. That's it. One missing line of code.</p>
-
-                <h4>2. Database Passwords Just Sitting There</h4>
-                <p>Next, I checked for a incredibly common mistake: looking for <code>.env</code> files. These are configuration files that tell the website how to connect to its database, and they are never supposed to be public.</p>
-                <p>Unfortunately, the servers were misconfigured, and I could view the <code>.env</code> files for multiple subdomains right in my browser. They contained the plaintext usernames and passwords for their databases.</p>
-                <p>Now, thankfully, the databases themselves weren't directly accessible from the outside internet. But leaving passwords sitting in plain text like that is a huge risk. If an attacker gets into the server another way, they have the keys to the kingdom.</p>
-
-                <h4>3. The Entire Source Code Was Exposed</h4>
-                <p>Every single subdomain I looked at had its <code>.git</code> directory exposed to the public. For non-tech folks, this is like leaving the master blueprint to your house taped to the front door. Anyone could have downloaded it and reconstructed the exact source code of the university's websites.</p>
-                <p>To make matters worse, it looked like a developer had accidentally pushed this exact same code—including those database passwords I just mentioned—to a public GitHub account. It was all just out there for the taking.</p>
-
-                <h4>4. Resetting Admin Passwords Without Verification</h4>
-                <p>On one of the admin panels, I found a password reset feature. Usually, if you forget your password, the system sends you an email or a text message to prove you are who you say you are.</p>
-                <p>This portal didn't do any of that. If you wanted to reset an admin's password, you just typed in their email address and picked a new password. No verification. No security questions. If you could guess or find an admin's email address, you owned their account.</p>
-
-                <h4>5. Anyone Could Make Themselves an Admin</h4>
-                <p>As if that wasn't enough, the registration page to create a new admin account was completely public. There was a field for an institutional ID, but there was zero approval process behind it. You could just type in an ID, create an account, and get admin privileges.</p>
-
-                <h4>6. Leaving the Debug Mode On</h4>
-                <p>Finally, one of the portals was still running in "development mode" instead of "production mode." Because of this, a special debug toolbar was visible to anyone who visited the site. It freely gave away the exact software versions they were using, the internal file paths on their server, and all the hidden routes in the application. It's a goldmine for someone looking to attack the site.</p>
-
-                <h3>The Real-World Impact</h3>
-                <p>It's easy to look at this as just a "tech problem," but I want to emphasize who actually gets hurt here: the students.</p>
-                <p>Over a hundred real people had their most sensitive data exposed—data that could be used to open fake bank accounts, take out loans, or commit identity fraud. If you ever find out your data was caught up in a leak like this, you need to act fast: monitor your financial accounts, check your national ID usage history, and lock down your biometric data if possible.</p>
-
-                <h3>My Takeaway</h3>
-                <p>The craziest part about all of this? None of these were sophisticated, zero-day hacks.</p>
-                <p>The critical data leak was caused by a single missing line of code. The rest were basic, fundamental security hygiene failures: leaving config files public, exposing source code, and forgetting to turn off debug mode.</p>
-                <p>The good news is that all of these issues are incredibly easy to fix—most of them could be patched in a single afternoon. The bad news is that until someone actually sits down and does the work, student data is sitting out there, just one click away from being abused.</p>
-
-                <div class="note">
-                    <strong>Note:</strong> I have chosen to omit the specific university name, exact URLs, developer names, and database details from this write-up to prevent any malicious actors from misusing this information.
-                </div>
-            </article>
         </div>
 
     </div>
@@ -1256,65 +1202,6 @@
             });
         })();
 
-        // --- Blog Navigation with URL Routing ---
-        (function() {
-            const mainPage = document.getElementById('mainPage');
-            const blogPage = document.getElementById('blogPage');
-            const blogNavBtn = document.getElementById('blogNavBtn');
-            const blogBackBtn = document.getElementById('blogBackBtn');
-            const basePath = '/gopimalagasi';
-
-            function showBlog() {
-                mainPage.classList.add('hidden');
-                blogPage.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                window.history.pushState({ page: 'blog' }, '', basePath + '/blog');
-            }
-
-            function showMain() {
-                mainPage.classList.remove('hidden');
-                blogPage.classList.remove('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                window.history.pushState({ page: 'main' }, '', basePath + '/');
-            }
-
-            function handlePopState(e) {
-                if (e.state && e.state.page === 'blog') {
-                    mainPage.classList.add('hidden');
-                    blogPage.classList.add('active');
-                } else {
-                    mainPage.classList.remove('hidden');
-                    blogPage.classList.remove('active');
-                }
-            }
-
-            function initializeFromURL() {
-                const pathname = window.location.pathname;
-                if (pathname.includes('/blog')) {
-                    mainPage.classList.add('hidden');
-                    blogPage.classList.add('active');
-                } else {
-                    mainPage.classList.remove('hidden');
-                    blogPage.classList.remove('active');
-                }
-            }
-
-            blogNavBtn.addEventListener('click', showBlog);
-            blogBackBtn.addEventListener('click', showMain);
-            window.addEventListener('popstate', handlePopState);
-             
-            initializeFromURL();
-        })();
-
-        // --- Set today's date on blog post ---
-        (function() {
-            const dateEl = document.getElementById('blogDate');
-            if (dateEl) {
-                const now = new Date();
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
-                dateEl.textContent = now.toLocaleDateString('en-US', options);
-            }
-        })();
 
         // --- Subtle mouse parallax — moves doodles slightly based on cursor position ---
         (function() {

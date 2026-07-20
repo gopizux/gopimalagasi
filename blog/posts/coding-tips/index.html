@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-site-verification" content="1fR54c0KktduXTOmcvV4cOz12C84D8WBvkkA9BQd6-Y" />
+    <title>Best Practices in Modern Development — Gopi Malagasi</title>
+    <meta name="description" content="Essential practices for writing better, more maintainable code." />
+    <meta name="author" content="Gopi Malagasi" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            transition: background 0.35s ease, color 0.35s ease;
+        }
+
+        :root {
+            --bg: #0a0a0a;
+            --bg-soft: #111;
+            --bg-border: #222;
+            --text: #e0e0e0;
+            --text-muted: #666;
+            --text-dim: #444;
+            --link-hover: #ff4d00;
+            --code-bg: #1a1a1a;
+        }
+
+        [data-theme="light"] {
+            --bg: #f5f3f0;
+            --bg-soft: #edeae6;
+            --bg-border: #d5d0ca;
+            --text: #1a1a1a;
+            --text-muted: #555;
+            --text-dim: #888;
+            --link-hover: #cc3d00;
+            --code-bg: #e5e0db;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 60px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--bg-border);
+        }
+
+        header a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        header a:hover {
+            color: var(--link-hover);
+        }
+
+        .back-link {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            color: var(--link-hover);
+        }
+
+        .post-header {
+            margin-bottom: 40px;
+        }
+
+        .post-date {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .post-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .post-content {
+            color: var(--text);
+        }
+
+        .post-content h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            letter-spacing: -0.01em;
+        }
+
+        .post-content h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-top: 32px;
+            margin-bottom: 12px;
+        }
+
+        .post-content p {
+            margin-bottom: 18px;
+            line-height: 1.8;
+        }
+
+        .post-content ul,
+        .post-content ol {
+            margin-left: 24px;
+            margin-bottom: 18px;
+        }
+
+        .post-content li {
+            margin-bottom: 8px;
+        }
+
+        .post-content code {
+            background-color: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.95em;
+            color: var(--link-hover);
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
+        }
+
+        .post-content pre {
+            background-color: var(--code-bg);
+            padding: 16px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 24px 0;
+            border: 1px solid var(--bg-border);
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--link-hover);
+            padding-left: 20px;
+            margin: 24px 0;
+            font-style: italic;
+            color: var(--text-muted);
+        }
+
+        .post-content a {
+            color: var(--link-hover);
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .post-content a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--bg-border);
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-align: center;
+        }
+
+        @media (max-width: 640px) {
+            .post-title {
+                font-size: 1.8rem;
+            }
+
+            .post-content h2 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/gopimalagasi/blog/" class="back-link">← Back to Blog</a>
+            <button class="theme-toggle" aria-label="Toggle theme" id="themeToggle">
+                <span>🌙</span>
+            </button>
+        </header>
+
+        <main>
+            <article>
+                <div class="post-header">
+                    <p class="post-date">July 10, 2026</p>
+                    <h1 class="post-title">Best Practices in Modern Development</h1>
+                </div>
+
+                <div class="post-content">
+                    <p>Writing clean, maintainable code is not just about aesthetics—it's about building software that scales, is easy to debug, and that your team can collaborate on effectively. Let's explore the essential practices that separate amateur code from professional software.</p>
+
+                    <h2>Code Quality & Style</h2>
+                    <p>Consistency is key. Adopt a style guide and stick to it:</p>
+                    <ul>
+                        <li>Use a linter (ESLint, Pylint, etc.) to enforce code standards</li>
+                        <li>Format code automatically with tools like Prettier</li>
+                        <li>Keep functions small and focused on a single responsibility</li>
+                        <li>Use meaningful variable and function names</li>
+                    </ul>
+
+                    <h2>Version Control & Git Workflows</h2>
+                    <p>Proper version control practices are fundamental:</p>
+                    <ul>
+                        <li>Use meaningful commit messages that explain the "why"</li>
+                        <li>Keep commits atomic and logically grouped</li>
+                        <li>Use branches for features and bug fixes</li>
+                        <li>Implement code review processes before merging</li>
+                    </ul>
+
+                    <h2>Testing Your Code</h2>
+                    <p>Tests are not optional—they're essential:</p>
+                    <pre><code>// Example: Unit test
+describe('calculateTotal', () => {
+  it('should sum all prices correctly', () => {
+    const total = calculateTotal([10, 20, 30]);
+    expect(total).toBe(60);
+  });
+});</code></pre>
+
+                    <p>Aim for a balanced approach:</p>
+                    <ul>
+                        <li><strong>Unit Tests:</strong> Test individual functions and components</li>
+                        <li><strong>Integration Tests:</strong> Test how components work together</li>
+                        <li><strong>E2E Tests:</strong> Test complete user workflows</li>
+                    </ul>
+
+                    <h2>Documentation</h2>
+                    <p>Good documentation saves countless hours:</p>
+                    <ul>
+                        <li>Document complex logic inline</li>
+                        <li>Write README files for projects</li>
+                        <li>Keep API documentation up to date</li>
+                        <li>Use JSDoc or similar tools for function documentation</li>
+                    </ul>
+
+                    <h2>Performance Optimization</h2>
+                    <p>Users appreciate fast applications:</p>
+                    <ul>
+                        <li>Profile your code before optimizing</li>
+                        <li>Cache frequently accessed data</li>
+                        <li>Minimize network requests</li>
+                        <li>Optimize database queries</li>
+                        <li>Use lazy loading for large datasets</li>
+                    </ul>
+
+                    <blockquote>
+                        "Clean code always looks like it was written by someone who cares." — Robert C. Martin
+                    </blockquote>
+
+                    <h2>Continuous Integration & Deployment</h2>
+                    <p>Automate everything you can:</p>
+                    <ul>
+                        <li>Run tests automatically on every commit</li>
+                        <li>Automate code quality checks</li>
+                        <li>Deploy to staging for final testing</li>
+                        <li>Use continuous deployment for production releases</li>
+                    </ul>
+
+                    <h2>Final Thoughts</h2>
+                    <p>Adopting these practices takes discipline and time, but the payoff is massive. Your code becomes easier to maintain, collaborate on, and extend. Start small, pick one or two practices to implement, and gradually build a strong development foundation.</p>
+                </div>
+            </article>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Gopi Malagasi. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const html = document.documentElement;
+        const themeToggle = document.getElementById('themeToggle');
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+
+        html.setAttribute('data-theme', currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const theme = html.getAttribute('data-theme');
+            const nextTheme = theme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', nextTheme);
+            localStorage.setItem('theme', nextTheme);
+            themeToggle.textContent = nextTheme === 'light' ? '🌙' : '☀️';
+        });
+
+        if (currentTheme === 'light') {
+            themeToggle.textContent = '☀️';
+        }
+    </script>
+</body>
+</html>

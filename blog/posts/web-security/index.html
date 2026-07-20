@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-site-verification" content="1fR54c0KktduXTOmcvV4cOz12C84D8WBvkkA9BQd6-Y" />
+    <title>Web Security Fundamentals — Gopi Malagasi</title>
+    <meta name="description" content="Essential concepts for web application security." />
+    <meta name="author" content="Gopi Malagasi" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            transition: background 0.35s ease, color 0.35s ease;
+        }
+
+        :root {
+            --bg: #0a0a0a;
+            --bg-soft: #111;
+            --bg-border: #222;
+            --text: #e0e0e0;
+            --text-muted: #666;
+            --text-dim: #444;
+            --link-hover: #ff4d00;
+            --code-bg: #1a1a1a;
+        }
+
+        [data-theme="light"] {
+            --bg: #f5f3f0;
+            --bg-soft: #edeae6;
+            --bg-border: #d5d0ca;
+            --text: #1a1a1a;
+            --text-muted: #555;
+            --text-dim: #888;
+            --link-hover: #cc3d00;
+            --code-bg: #e5e0db;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 60px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--bg-border);
+        }
+
+        header a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        header a:hover {
+            color: var(--link-hover);
+        }
+
+        .back-link {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            color: var(--link-hover);
+        }
+
+        .post-header {
+            margin-bottom: 40px;
+        }
+
+        .post-date {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .post-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .post-content {
+            color: var(--text);
+        }
+
+        .post-content h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            letter-spacing: -0.01em;
+        }
+
+        .post-content h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-top: 32px;
+            margin-bottom: 12px;
+        }
+
+        .post-content p {
+            margin-bottom: 18px;
+            line-height: 1.8;
+        }
+
+        .post-content ul,
+        .post-content ol {
+            margin-left: 24px;
+            margin-bottom: 18px;
+        }
+
+        .post-content li {
+            margin-bottom: 8px;
+        }
+
+        .post-content code {
+            background-color: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.95em;
+            color: var(--link-hover);
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
+        }
+
+        .post-content pre {
+            background-color: var(--code-bg);
+            padding: 16px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 24px 0;
+            border: 1px solid var(--bg-border);
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--link-hover);
+            padding-left: 20px;
+            margin: 24px 0;
+            font-style: italic;
+            color: var(--text-muted);
+        }
+
+        .post-content a {
+            color: var(--link-hover);
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .post-content a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--bg-border);
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-align: center;
+        }
+
+        @media (max-width: 640px) {
+            .post-title {
+                font-size: 1.8rem;
+            }
+
+            .post-content h2 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/gopimalagasi/blog/" class="back-link">← Back to Blog</a>
+            <button class="theme-toggle" aria-label="Toggle theme" id="themeToggle">
+                <span>🌙</span>
+            </button>
+        </header>
+
+        <main>
+            <article>
+                <div class="post-header">
+                    <p class="post-date">July 15, 2026</p>
+                    <h1 class="post-title">Web Security Fundamentals</h1>
+                </div>
+
+                <div class="post-content">
+                    <p>Web security is more critical than ever. With cyber attacks becoming increasingly sophisticated, understanding the fundamental security concepts is essential for every developer and security professional.</p>
+
+                    <h2>Common Web Vulnerabilities</h2>
+                    <p>The OWASP Top 10 outlines the most critical security risks for web applications:</p>
+                    <ul>
+                        <li><strong>SQL Injection:</strong> Injecting malicious SQL code to manipulate databases</li>
+                        <li><strong>XSS (Cross-Site Scripting):</strong> Injecting malicious scripts into web pages</li>
+                        <li><strong>CSRF (Cross-Site Request Forgery):</strong> Tricking users into making unwanted actions</li>
+                        <li><strong>Broken Authentication:</strong> Weak session management and credential exposure</li>
+                        <li><strong>Sensitive Data Exposure:</strong> Improper protection of sensitive information</li>
+                    </ul>
+
+                    <h2>Authentication Best Practices</h2>
+                    <p>Strong authentication is your first line of defense:</p>
+                    <ul>
+                        <li>Use strong password policies with minimum length requirements</li>
+                        <li>Implement multi-factor authentication (MFA) when possible</li>
+                        <li>Hash passwords using modern algorithms like bcrypt or Argon2</li>
+                        <li>Never store passwords in plain text</li>
+                        <li>Use HTTPS for all authentication endpoints</li>
+                    </ul>
+
+                    <h2>Securing Your Code</h2>
+                    <p>Prevention is better than cure. Here are essential coding practices:</p>
+                    <pre><code>// ❌ Bad: SQL Injection vulnerability
+const query = "SELECT * FROM users WHERE id = " + userId;
+
+// ✅ Good: Use prepared statements
+const query = "SELECT * FROM users WHERE id = ?";
+db.query(query, [userId]);</code></pre>
+
+                    <h2>HTTPS and Encryption</h2>
+                    <p>Always use HTTPS to encrypt data in transit. This protects against:</p>
+                    <ul>
+                        <li>Man-in-the-middle attacks</li>
+                        <li>Data eavesdropping</li>
+                        <li>Session hijacking</li>
+                    </ul>
+
+                    <blockquote>
+                        "Security is not a product, but a process." — Bruce Schneier
+                    </blockquote>
+
+                    <h2>Regular Security Audits</h2>
+                    <p>Continuously monitor and improve your security posture:</p>
+                    <ul>
+                        <li>Perform regular security audits and penetration testing</li>
+                        <li>Keep dependencies updated</li>
+                        <li>Use security scanning tools in your CI/CD pipeline</li>
+                        <li>Monitor for suspicious activities</li>
+                    </ul>
+
+                    <p>Remember, security is an ongoing process. Stay informed about new threats and keep improving your defenses.</p>
+                </div>
+            </article>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Gopi Malagasi. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const html = document.documentElement;
+        const themeToggle = document.getElementById('themeToggle');
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+
+        html.setAttribute('data-theme', currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const theme = html.getAttribute('data-theme');
+            const nextTheme = theme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', nextTheme);
+            localStorage.setItem('theme', nextTheme);
+            themeToggle.textContent = nextTheme === 'light' ? '🌙' : '☀️';
+        });
+
+        if (currentTheme === 'light') {
+            themeToggle.textContent = '☀️';
+        }
+    </script>
+</body>
+</html>
