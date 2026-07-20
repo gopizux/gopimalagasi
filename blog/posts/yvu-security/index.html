@@ -12,10 +12,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-site-verification" content="1fR54c0KktduXTOmcvV4cOz12C84D8WBvkkA9BQd6-Y" />
     <title>I Found a Massive Security Gap in Yogi Vemana University — Gopi Malagasi</title>
-    <meta name="description" content="A write-up about a large security gap discovered during a penetration test." />
+    <meta name="description" content="A write-up about a large security gap discovered during a penetration test at a state university." />
     <meta name="author" content="Gopi Malagasi" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <style>
+        /* --- Reset & Core --- */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            transition: background 0.35s ease, color 0.35s ease;
+        }
+
         /* --- LIGHT / DARK THEME VARIABLES --- */
         :root {
             --bg: #0a0a0a;
@@ -99,6 +114,452 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             --blog-strong: #cc3d00;
         }
 
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            cursor: crosshair;
+            overflow-x: hidden;
+            transition: background 0.35s ease, color 0.35s ease;
+        }
+
+        html {
+            background: var(--bg);
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+        }
+
+        a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--link-hover);
+        }
+
+        /* --- Background Doodles Layer --- */
+        .bg-doodles {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bg-doodles svg {
+            position: absolute;
+            fill: none;
+            stroke-width: 1.2;
+            overflow: visible;
+            will-change: transform;
+        }
+
+        .bg-doodles .stroke-orange {
+            stroke: #ff4d00;
+            opacity: var(--doodle-opacity);
+            transition: opacity 0.35s ease;
+        }
+        .bg-doodles .stroke-orange-dim {
+            stroke: #ff4d00;
+            opacity: var(--doodle-opacity-dim);
+            transition: opacity 0.35s ease;
+        }
+        .bg-doodles .stroke-grey {
+            stroke: var(--text);
+            opacity: var(--doodle-grey);
+            transition: stroke 0.35s ease, opacity 0.35s ease;
+        }
+
+        /* Positioning & motion per doodle */
+        .doodle-dna {
+            top: 4%;
+            left: 2%;
+            width: 78px;
+            height: 400px;
+            animation: sway 9s ease-in-out infinite alternate;
+        }
+        .doodle-benzene {
+            top: 8%;
+            right: 4%;
+            width: 95px;
+            height: 95px;
+            animation: spin 50s linear infinite;
+        }
+        .doodle-ahelix {
+            top: 42%;
+            left: 3%;
+            width: 80px;
+            height: 340px;
+            animation: helix-rotate 7s ease-in-out infinite;
+        }
+        .doodle-mol {
+            top: 36%;
+            right: 3%;
+            width: 130px;
+            height: 110px;
+            animation: drift 17s ease-in-out infinite alternate;
+        }
+        .doodle-beta {
+            top: 70%;
+            right: 6%;
+            width: 200px;
+            height: 70px;
+            animation: drift 23s ease-in-out infinite alternate-reverse;
+        }
+        .doodle-hex {
+            bottom: 5%;
+            left: 4%;
+            width: 130px;
+            height: 130px;
+            animation: spin 80s linear infinite reverse;
+        }
+        .doodle-small-1 {
+            top: 24%;
+            right: 18%;
+            width: 52px;
+            height: 52px;
+            animation: drift 14s ease-in-out infinite alternate;
+        }
+        .doodle-small-2 {
+            top: 78%;
+            left: 16%;
+            width: 48px;
+            height: 48px;
+            animation: spin 32s linear infinite;
+        }
+
+        /* Stroke drawing animation */
+        .doodle-dna .strand,
+        .doodle-ahelix path,
+        .doodle-beta polyline,
+        .doodle-benzene polygon,
+        .doodle-benzene circle,
+        .doodle-hex polygon,
+        .doodle-hex line,
+        .doodle-small-2 polygon,
+        .doodle-small-2 circle {
+            stroke-dasharray: 1400;
+            stroke-dashoffset: 1400;
+            animation: draw 18s ease-in-out infinite;
+        }
+
+        .doodle-benzene * {
+            animation-delay: -4s;
+        }
+        .doodle-ahelix * {
+            animation-delay: -8s;
+        }
+        .doodle-beta * {
+            animation-delay: -2s;
+            animation-duration: 22s;
+        }
+        .doodle-hex * {
+            animation-delay: -12s;
+            animation-duration: 24s;
+        }
+        .doodle-small-2 * {
+            animation-delay: -6s;
+            animation-duration: 14s;
+        }
+
+        /* DNA rungs */
+        .doodle-dna .rung {
+            stroke-dasharray: 60;
+            stroke-dashoffset: 60;
+            animation: draw-rung 5s ease-in-out infinite;
+        }
+        .doodle-dna .rung:nth-child(3) {
+            animation-delay: 0s;
+        }
+        .doodle-dna .rung:nth-child(4) {
+            animation-delay: 0.7s;
+        }
+        .doodle-dna .rung:nth-child(5) {
+            animation-delay: 1.4s;
+        }
+        .doodle-dna .rung:nth-child(6) {
+            animation-delay: 2.1s;
+        }
+        .doodle-dna .rung:nth-child(7) {
+            animation-delay: 2.8s;
+        }
+
+        /* Molecule atom pulses */
+        .doodle-mol circle,
+        .doodle-small-1 circle {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: atom-pulse 4.5s ease-in-out infinite;
+        }
+        .doodle-mol circle:nth-of-type(1) {
+            animation-delay: 0s;
+        }
+        .doodle-mol circle:nth-of-type(2) {
+            animation-delay: 0.6s;
+        }
+        .doodle-mol circle:nth-of-type(3) {
+            animation-delay: 1.2s;
+        }
+        .doodle-mol circle:nth-of-type(4) {
+            animation-delay: 1.8s;
+        }
+        .doodle-mol circle:nth-of-type(5) {
+            animation-delay: 2.4s;
+        }
+        .doodle-small-1 circle:nth-of-type(1) {
+            animation-delay: 0.3s;
+        }
+        .doodle-small-1 circle:nth-of-type(2) {
+            animation-delay: 1s;
+        }
+        .doodle-small-1 circle:nth-of-type(3) {
+            animation-delay: 1.7s;
+        }
+        .doodle-small-1 circle:nth-of-type(4) {
+            animation-delay: 2.4s;
+        }
+
+        /* Formula labels */
+        .doodle-formula {
+            position: absolute;
+            font-family: inherit;
+            color: #ff4d00;
+            opacity: 0.14;
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            white-space: nowrap;
+            animation: drift 19s ease-in-out infinite alternate;
+            transition: opacity 0.35s ease;
+        }
+        .formula-1 {
+            top: 18%;
+            right: 22%;
+        }
+        .formula-2 {
+            top: 60%;
+            left: 22%;
+            animation-delay: -6s;
+        }
+        .formula-3 {
+            top: 88%;
+            right: 28%;
+            animation-delay: -10s;
+            font-size: 0.7rem;
+        }
+
+        /* Parallax offset via CSS custom properties */
+        .doodle-dna {
+            translate: calc(var(--mx, 0) * 6px) calc(var(--my, 0) * 6px);
+        }
+        .doodle-benzene {
+            translate: calc(var(--mx, 0) * 10px) calc(var(--my, 0) * 10px);
+        }
+        .doodle-ahelix {
+            translate: calc(var(--mx, 0) * 7px) calc(var(--my, 0) * 7px);
+        }
+        .doodle-mol {
+            translate: calc(var(--mx, 0) * 12px) calc(var(--my, 0) * 12px);
+        }
+        .doodle-beta {
+            translate: calc(var(--mx, 0) * 8px) calc(var(--my, 0) * 8px);
+        }
+        .doodle-hex {
+            translate: calc(var(--mx, 0) * 5px) calc(var(--my, 0) * 5px);
+        }
+        .doodle-small-1 {
+            translate: calc(var(--mx, 0) * 14px) calc(var(--my, 0) * 14px);
+        }
+        .doodle-small-2 {
+            translate: calc(var(--mx, 0) * 9px) calc(var(--my, 0) * 9px);
+        }
+        .doodle-formula {
+            translate: calc(var(--mx, 0) * 16px) calc(var(--my, 0) * 16px);
+        }
+
+        /* Keyframes */
+        @keyframes sway {
+            0% {
+                transform: translateX(0) rotate(-1.2deg);
+            }
+            100% {
+                transform: translateX(7px) rotate(1.2deg);
+            }
+        }
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes drift {
+            0% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(12px, -8px);
+            }
+            100% {
+                transform: translate(-8px, 12px);
+            }
+        }
+        @keyframes helix-rotate {
+            0%,
+            100% {
+                transform: scaleX(1);
+            }
+            50% {
+                transform: scaleX(0.22);
+            }
+        }
+        @keyframes draw {
+            0% {
+                stroke-dashoffset: 1400;
+            }
+            45% {
+                stroke-dashoffset: 0;
+            }
+            55% {
+                stroke-dashoffset: 0;
+            }
+            100% {
+                stroke-dashoffset: -1400;
+            }
+        }
+        @keyframes draw-rung {
+            0%,
+            25% {
+                stroke-dashoffset: 60;
+                opacity: 0;
+            }
+            55%,
+            75% {
+                stroke-dashoffset: 0;
+                opacity: 0.5;
+            }
+            100% {
+                stroke-dashoffset: -60;
+                opacity: 0;
+            }
+        }
+        @keyframes atom-pulse {
+            0%,
+            100% {
+                opacity: 0.18;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.42;
+                transform: scale(1.18);
+            }
+        }
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(255, 77, 0, 0.6);
+            }
+            50% {
+                opacity: 0.6;
+                box-shadow: 0 0 0 6px rgba(255, 77, 0, 0);
+            }
+        }
+
+        /* --- Layout --- */
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Header --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 40px;
+            border-bottom: 1px solid var(--bg-border);
+            margin-bottom: 60px;
+            transition: border-color 0.35s ease;
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .back-link {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            border: none;
+            background: none;
+            font-family: inherit;
+            padding: 0;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: var(--link-hover);
+        }
+
+        /* --- Theme Toggle Button --- */
+        .theme-toggle {
+            background: var(--toggle-bg);
+            border: none;
+            border-radius: 30px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.25s ease, transform 0.2s ease;
+            flex-shrink: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        .theme-toggle:hover {
+            background: var(--toggle-hover);
+            transform: scale(1.05);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.94);
+        }
+
+        .theme-toggle svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: var(--toggle-icon);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: stroke 0.35s ease, transform 0.4s ease;
+        }
+
         .theme-toggle .sun-icon,
         .theme-toggle .moon-icon {
             position: absolute;
@@ -123,176 +584,204 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             transform: rotate(0deg) scale(1);
         }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            line-height: 1.7;
+        /* --- BLOG POST --- */
+        .blog-post {
+            background: var(--blog-bg);
+            padding: 48px 52px;
+            border-radius: 12px;
+            border: 1px solid var(--blog-border);
+            transition: background 0.35s ease, border-color 0.35s ease, color 0.35s ease;
+            color: var(--blog-text);
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 60px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--bg-border);
-        }
-
-        header a {
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.2s ease;
-        }
-
-        header a:hover {
-            color: var(--link-hover);
-        }
-
-        .back-link {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .theme-toggle {
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color 0.2s ease;
-        }
-
-        .theme-toggle:hover {
-            color: var(--link-hover);
-        }
-
-        .post-header {
-            margin-bottom: 40px;
-        }
-
-        .post-date {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 12px;
-        }
-
-        .post-title {
-            font-size: 2.2rem;
+        .blog-post h2 {
+            font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 20px;
-            letter-spacing: -0.02em;
             line-height: 1.2;
+            margin-bottom: 12px;
+            color: var(--blog-heading);
+            letter-spacing: -0.02em;
         }
 
-        .post-content {
-            color: var(--text);
+        .blog-post .blog-date {
+            font-size: 0.8rem;
+            color: var(--blog-sub);
+            margin-bottom: 32px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        .post-content h2 {
-            font-size: 1.6rem;
-            font-weight: 600;
-            margin-top: 40px;
-            margin-bottom: 16px;
-            letter-spacing: -0.01em;
-        }
-
-        .post-content h3 {
+        .blog-post h3 {
             font-size: 1.3rem;
             font-weight: 600;
-            margin-top: 32px;
-            margin-bottom: 12px;
+            margin-top: 36px;
+            margin-bottom: 16px;
+            color: var(--blog-heading);
         }
 
-        .post-content p {
+        .blog-post h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-top: 28px;
+            margin-bottom: 10px;
+            color: var(--blog-heading);
+        }
+
+        .blog-post p {
             margin-bottom: 18px;
             line-height: 1.8;
+            color: var(--blog-text);
         }
 
-        .post-content ul,
-        .post-content ol {
-            margin-left: 24px;
-            margin-bottom: 18px;
+        .blog-post strong {
+            color: var(--blog-strong);
+            font-weight: 600;
         }
 
-        .post-content li {
+        .blog-post ul,
+        .blog-post ol {
+            margin: 16px 0 20px 28px;
+            color: var(--blog-text);
+        }
+
+        .blog-post li {
             margin-bottom: 8px;
         }
 
-        .post-content code {
-            background-color: var(--blog-code-bg);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.95em;
-            color: var(--blog-strong);
-            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
-        }
-
-        .post-content pre {
-            background-color: var(--blog-code-bg);
-            padding: 16px 20px;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 24px 0;
-            border: 1px solid var(--bg-border);
-        }
-
-        .post-content pre code {
-            background: none;
-            padding: 0;
-            border-radius: 0;
-        }
-
-        .post-content blockquote {
+        .blog-post blockquote {
             border-left: 3px solid var(--link-hover);
-            padding-left: 20px;
+            padding: 12px 24px;
             margin: 24px 0;
+            background: var(--blog-blockquote);
+            border-radius: 0 6px 6px 0;
+            color: var(--blog-text);
             font-style: italic;
-            color: var(--text-muted);
         }
 
-        .post-content a {
-            color: var(--link-hover);
-            text-decoration: none;
-            transition: opacity 0.2s ease;
+        .blog-post code {
+            background: var(--blog-code-bg);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: var(--blog-strong);
         }
 
-        .post-content a:hover {
-            opacity: 0.8;
-            text-decoration: underline;
+        .blog-post .note {
+            margin-top: 32px;
+            padding: 16px 20px;
+            border: 1px solid var(--blog-border);
+            border-radius: 6px;
+            background: var(--blog-blockquote);
+            font-size: 0.9rem;
+            color: var(--blog-sub);
         }
 
+        /* --- Footer --- */
         footer {
-            margin-top: 80px;
+            margin-top: auto;
+            border-top: 1px solid var(--footer-border);
             padding-top: 40px;
-            border-top: 1px solid var(--bg-border);
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--footer-text);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: border-color 0.35s ease, color 0.35s ease;
         }
 
-        @media (max-width: 640px) {
-            .post-title {
-                font-size: 1.8rem;
-            }
+        footer a {
+            color: var(--footer-text);
+            margin-left: 24px;
+            transition: color 0.2s ease;
+        }
 
-            .post-content h2 {
+        footer a:hover {
+            color: var(--link-hover);
+        }
+
+        /* --- Mobile --- */
+        @media (max-width: 900px) {
+            .doodle-small-1,
+            .doodle-small-2,
+            .doodle-beta,
+            .formula-3 {
+                display: none;
+            }
+            .doodle-dna,
+            .doodle-ahelix {
+                opacity: 0.55;
+            }
+            .blog-post {
+                padding: 28px 20px;
+            }
+            .blog-post h2 {
+                font-size: 1.6rem;
+            }
+        }
+        @media (max-width: 600px) {
+            .doodle-mol,
+            .doodle-hex,
+            .formula-1,
+            .formula-2 {
+                display: none;
+            }
+            footer {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+            header {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            .header-right {
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+            .theme-toggle {
+                width: 38px;
+                height: 38px;
+            }
+            .theme-toggle svg {
+                width: 18px;
+                height: 18px;
+            }
+            .blog-post {
+                padding: 20px 16px;
+            }
+            .blog-post h2 {
                 font-size: 1.3rem;
+            }
+            .blog-post ul,
+            .blog-post ol {
+                margin-left: 16px;
+            }
+        }
+
+        /* --- Reduced motion --- */
+        @media (prefers-reduced-motion: reduce) {
+            .bg-doodles svg,
+            .bg-doodles svg *,
+            .doodle-formula {
+                animation: none !important;
+            }
+            .doodle-dna .strand,
+            .doodle-ahelix path,
+            .doodle-beta polyline,
+            .doodle-benzene polygon,
+            .doodle-benzene circle,
+            .doodle-hex polygon,
+            .doodle-hex line,
+            .doodle-small-2 polygon,
+            .doodle-small-2 circle {
+                stroke-dashoffset: 0 !important;
+            }
+            .doodle-dna .rung {
+                stroke-dashoffset: 0 !important;
+                opacity: 0.4 !important;
             }
         }
     </style>
@@ -302,49 +791,239 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WSMZHPK4"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
-    <div class="container">
+
+    <div class="bg-doodles" aria-hidden="true">
+
+        <svg class="doodle doodle-dna" viewBox="0 0 100 400" xmlns="http://www.w3.org/2000/svg">
+            <path class="strand stroke-orange" d="M 50 0 C 90 25, 90 75, 50 100 C 10 125, 10 175, 50 200 C 90 225, 90 275, 50 300 C 10 325, 10 375, 50 400"/>
+            <path class="strand stroke-orange" d="M 50 0 C 10 25, 10 75, 50 100 C 90 125, 90 175, 50 200 C 10 225, 10 275, 50 300 C 90 325, 90 375, 50 400"/>
+            <line class="rung stroke-grey" x1="22" y1="50"  x2="78" y2="50"/>
+            <line class="rung stroke-grey" x1="22" y1="150" x2="78" y2="150"/>
+            <line class="rung stroke-grey" x1="22" y1="250" x2="78" y2="250"/>
+            <line class="rung stroke-grey" x1="22" y1="350" x2="78" y2="350"/>
+        </svg>
+
+        <svg class="doodle doodle-benzene" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon class="stroke-orange" points="50,8 88,30 88,70 50,92 12,70 12,30"/>
+            <circle class="stroke-orange" cx="50" cy="50" r="22"/>
+        </svg>
+
+        <svg class="doodle doodle-ahelix" viewBox="0 0 100 360" xmlns="http://www.w3.org/2000/svg">
+            <path class="stroke-orange" d="M 50 0 C 95 30, 5 60, 50 90 C 95 120, 5 150, 50 180 C 95 210, 5 240, 50 270 C 95 300, 5 330, 50 360"/>
+        </svg>
+
+        <svg class="doodle doodle-mol" viewBox="0 0 140 120" xmlns="http://www.w3.org/2000/svg">
+            <line class="stroke-grey" x1="70" y1="60" x2="25"  y2="25"/>
+            <line class="stroke-grey" x1="70" y1="60" x2="115" y2="25"/>
+            <line class="stroke-grey" x1="70" y1="60" x2="70"  y2="105"/>
+            <line class="stroke-grey" x1="70" y1="60" x2="20"  y2="95"/>
+            <circle class="stroke-orange" cx="70"  cy="60"  r="10"/>
+            <circle class="stroke-grey"   cx="25"  cy="25"  r="6"/>
+            <circle class="stroke-grey"   cx="115" cy="25"  r="6"/>
+            <circle class="stroke-grey"   cx="70"  cy="105" r="6"/>
+            <circle class="stroke-grey"   cx="20"  cy="95"  r="6"/>
+        </svg>
+
+        <svg class="doodle doodle-beta" viewBox="0 0 220 70" xmlns="http://www.w3.org/2000/svg">
+            <polyline class="stroke-orange" points="0,30 22,8 44,52 66,8 88,52 110,8 132,52 154,8 176,52 198,8 220,30"/>
+            <polyline class="stroke-grey"   points="0,45 22,23 44,67 66,23 88,67 110,23 132,67 154,23 176,67 198,23 220,45"/>
+        </svg>
+
+        <svg class="doodle doodle-hex" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+            <polygon class="stroke-grey" points="70,10 120,38 120,98 70,126 20,98 20,38"/>
+            <polygon class="stroke-grey" points="70,30 100,48 100,88 70,106 40,88 40,48"/>
+            <line class="stroke-grey" x1="70"  y1="10"  x2="70"  y2="30"/>
+            <line class="stroke-grey" x1="120" y1="38"  x2="100" y2="48"/>
+            <line class="stroke-grey" x1="120" y1="98"  x2="100" y2="88"/>
+            <line class="stroke-grey" x1="70"  y1="126" x2="70"  y2="106"/>
+            <line class="stroke-grey" x1="20"  y1="98"  x2="40"  y2="88"/>
+            <line class="stroke-grey" x1="20"  y1="38"  x2="40"  y2="48"/>
+        </svg>
+
+        <svg class="doodle doodle-small-1" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+            <line class="stroke-orange-dim" x1="40" y1="40" x2="15" y2="15"/>
+            <line class="stroke-orange-dim" x1="40" y1="40" x2="65" y2="15"/>
+            <line class="stroke-orange-dim" x1="40" y1="40" x2="40" y2="68"/>
+            <circle class="stroke-orange" cx="40" cy="40" r="8"/>
+            <circle class="stroke-orange" cx="15" cy="15" r="5"/>
+            <circle class="stroke-orange" cx="65" cy="15" r="5"/>
+            <circle class="stroke-orange" cx="40" cy="68" r="5"/>
+        </svg>
+
+        <svg class="doodle doodle-small-2" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+            <polygon class="stroke-orange" points="35,8 60,22 60,52 35,66 10,52 10,22"/>
+            <circle class="stroke-orange" cx="35" cy="37" r="14"/>
+        </svg>
+
+        <div class="doodle-formula formula-1">C₆H₁₂O₆</div>
+        <div class="doodle-formula formula-2">5′-ATG-CGT-TAA-3′</div>
+        <div class="doodle-formula formula-3">α-helix · 3.6 res/turn</div>
+
+    </div>
+
+    <div class="wrapper">
+
         <header>
             <a href="/gopimalagasi/blog/" class="back-link">← Back to Blog</a>
-            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                <svg class="sun-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="5"/>
-                    <line x1="12" y1="1" x2="12" y2="4"/>
-                    <line x1="12" y1="20" x2="12" y2="23"/>
-                    <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
-                    <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
-                    <line x1="1" y1="12" x2="4" y2="12"/>
-                    <line x1="20" y1="12" x2="23" y2="12"/>
-                    <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
-                    <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
-                </svg>
-                <svg class="moon-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                </svg>
-            </button>
+            <div class="header-right">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <svg class="sun-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="4"/>
+                        <line x1="12" y1="20" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
+                        <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="4" y2="12"/>
+                        <line x1="20" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
+                        <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+            </div>
         </header>
 
-        <main>
-            <article class="blog-post">
-                <h2>I Found a Massive Security Gap in Yogi Vemana University (www.yvu.edu.in) — And No Login Was Required to Grab Student Data</h2>
-                <span class="blog-date">July 18, 2026</span>
+        <article class="blog-post">
+            <h2>I Found a Massive Security Gap in Yogi Vemana University (www.yvu.edu.in) — And No Login Was Required to Grab Student Data</h2>
+            <span class="blog-date">July 18, 2026</span>
 
-                <p>During a recent penetration test on a state university's web infrastructure, I stumbled across some alarming security gaps. I want to share what I found to highlight how simple oversights can put real people at risk—but I'm intentionally leaving out specific names, exact URLs, and sensitive data to protect the students involved.</p>
+            <p>During a recent penetration test on a state university's web infrastructure, I stumbled across some alarming security gaps. I want to share what I found to highlight how simple oversights can put real people at risk—but I'm intentionally leaving out specific names, exact URLs, and sensitive data to protect the students involved.</p>
 
-                <h3>How It Started</h3>
-                <p>I was doing some routine work on a state university here in India. Like a lot of educational institutions, they've built out a pretty large web presence with different subdomains handling their main site, online education portals, and examination systems.</p>
-                <p>I started with the basics: just mapping out their attack surface to see what was publicly visible. Within minutes, I had a good picture of their setup. They were running a pretty standard tech stack—Apache, PHP, and the CodeIgniter framework. Nothing unusual at all.</p>
-                <p>Then, I started digging a little deeper, and things got messy.</p>
+            <h3>How It Started</h3>
+            <p>I was doing some routine work on a state university here in India. Like a lot of educational institutions, they've built out a pretty large web presence with different subdomains handling their main site, online education portals, and examination systems.</p>
+            <p>I started with the basics: just mapping out their attack surface to see what was publicly visible. Within minutes, I had a good picture of their setup. They were running a pretty standard tech stack—Apache, PHP, and the CodeIgniter framework. Nothing unusual at all.</p>
+            <p>Then, I started digging a little deeper, and things got messy.</p>
 
-                <h3>What I Found</h3>
+            <h3>What I Found</h3>
 
-                <h4>1. A Student Database Left Wide Open</h4>
-                <p>This was the one that made my jaw drop.</p>
-                <p>While exploring their online education portal, I noticed an endpoint designed to let super admins export student data into a spreadsheet. The massive flaw? There was absolutely no login required to access it.</p>
-                <p>I ran a single command to request that page, and it immediately downloaded a file to my computer. It contained records for over a hundred students.</p>
-                <p>I won't go into the exact fields, but the file contained deeply personal information. I'm talking full names, phone numbers, home addresses, family details, and complete education histories. Worst of all, it included highly sensitive national ID numbers (similar to a Social Security Number).</p>
-                <p>Let that sink in for a second. With one unauthenticated click, anyone on the internet could have downloaded enough information to ruin over a hundred people's lives through identity theft.</p>
-                <p>When I looked at how this could happen, the answer was depressingly simple. In the source code, the developer had written a function to pull all the student records from the database and serve them up, but they simply forgot to add the line of code that checks if the user is actually logged in. That's it. One missing line of code.</p>
+            <h4>1. A Student Database Left Wide Open</h4>
+            <p>This was the one that made my jaw drop.</p>
+            <p>While exploring their online education portal, I noticed an endpoint designed to let super admins export student data into a spreadsheet. The massive flaw? There was absolutely no login required to access it.</p>
+            <p>I ran a single command to request that page, and it immediately downloaded a file to my computer. It contained records for over a hundred students.</p>
+            <p>I won't go into the exact fields, but the file contained deeply personal information. I'm talking full names, phone numbers, home addresses, family details, and complete education histories. Worst of all, it included highly sensitive national ID numbers (similar to a Social Security Number).</p>
+            <p>Let that sink in for a second. With one unauthenticated click, anyone on the internet could have downloaded enough information to ruin over a hundred people's lives through identity theft.</p>
+            <p>When I looked at how this could happen, the answer was depressingly simple. In the source code, the developer had written a function to pull all the student records from the database and serve them up, but they simply forgot to add the line of code that checks if the user is actually logged in. That's it. One missing line of code.</p>
 
-                <h4>2. Database Passwords Just Sitting There</h4>
-                <p>Next, I checked for a incredibly common mistake: looking for <code>.env</code> files. These are configuration files that tell the website how to connect to its database, and they are never supposed to be public.</p>
-... (truncated)
+            <h4>2. Database Passwords Just Sitting There</h4>
+            <p>Next, I checked for a incredibly common mistake: looking for <code>.env</code> files. These are configuration files that tell the website how to connect to its database, and they are never supposed to be public.</p>
+            <p>Unfortunately, the servers were misconfigured, and I could view the <code>.env</code> files for multiple subdomains right in my browser. They contained the plaintext usernames and passwords for their databases.</p>
+            <p>Now, thankfully, the databases themselves weren't directly accessible from the outside internet. But leaving passwords sitting in plain text like that is a huge risk. If an attacker gets into the server another way, they have the keys to the kingdom.</p>
+
+            <h4>3. The Entire Source Code Was Exposed</h4>
+            <p>Every single subdomain I looked at had its <code>.git</code> directory exposed to the public. For non-tech folks, this is like leaving the master blueprint to your house taped to the front door. Anyone could have downloaded it and reconstructed the exact source code of the university's websites.</p>
+            <p>To make matters worse, it looked like a developer had accidentally pushed this exact same code—including those database passwords I just mentioned—to a public GitHub account. It was all just out there for the taking.</p>
+
+            <h4>4. Resetting Admin Passwords Without Verification</h4>
+            <p>On one of the admin panels, I found a password reset feature. Usually, if you forget your password, the system sends you an email or a text message to prove you are who you say you are.</p>
+            <p>This portal didn't do any of that. If you wanted to reset an admin's password, you just typed in their email address and picked a new password. No verification. No security questions. If you could guess or find an admin's email address, you owned their account.</p>
+
+            <h4>5. Anyone Could Make Themselves an Admin</h4>
+            <p>As if that wasn't enough, the registration page to create a new admin account was completely public. There was a field for an institutional ID, but there was zero approval process behind it. You could just type in an ID, create an account, and get admin privileges.</p>
+
+            <h4>6. Leaving the Debug Mode On</h4>
+            <p>Finally, one of the portals was still running in "development mode" instead of "production mode." Because of this, a special debug toolbar was visible to anyone who visited the site. It freely gave away the exact software versions they were using, the internal file paths on their server, and all the hidden routes in the application. It's a goldmine for someone looking to attack the site.</p>
+
+            <h3>The Real-World Impact</h3>
+            <p>It's easy to look at this as just a "tech problem," but I want to emphasize who actually gets hurt here: the students.</p>
+            <p>Over a hundred real people had their most sensitive data exposed—data that could be used to open fake bank accounts, take out loans, or commit identity fraud. If you ever find out your data was caught up in a leak like this, you need to act fast: monitor your financial accounts, check your national ID usage history, and lock down your biometric data if possible.</p>
+
+            <h3>My Takeaway</h3>
+            <p>The craziest part about all of this? None of these were sophisticated, zero-day hacks.</p>
+            <p>The critical data leak was caused by a single missing line of code. The rest were basic, fundamental security hygiene failures: leaving config files public, exposing source code, and forgetting to turn off debug mode.</p>
+            <p>The good news is that all of these issues are incredibly easy to fix—most of them could be patched in a single afternoon. The bad news is that until someone actually sits down and does the work, student data is sitting out there, just one click away from being abused.</p>
+
+            <div class="note">
+                <strong>Note:</strong> I have chosen to omit the specific university name, exact URLs, developer names, and database details from this write-up to prevent any malicious actors from misusing this information.
+            </div>
+        </article>
+
+        <footer>
+            <span>Gopi © 2025</span>
+            <div>
+                <a href="mailto:gopizux@gmail.com">Mail</a>
+                <a href="https://github.com/gopizux" target="_blank" rel="noopener">Github</a>
+                <a href="https://linkedin.com/in/gopizux" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        // --- Theme Toggle ---
+        (function() {
+            const toggle = document.getElementById('themeToggle');
+            const html = document.documentElement;
+
+            const stored = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            let currentTheme = stored || (prefersDark ? 'dark' : 'light');
+
+            function setTheme(theme) {
+                html.setAttribute('data-theme', theme);
+                currentTheme = theme;
+                localStorage.setItem('theme', theme);
+            }
+
+            function toggleTheme() {
+                const next = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(next);
+            }
+
+            toggle.addEventListener('click', toggleTheme);
+            setTheme(currentTheme);
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (!localStorage.getItem('theme')) {
+                    setTheme(e.matches ? 'dark' : 'light');
+                }
+            });
+        })();
+
+        // --- Subtle mouse parallax — moves doodles slightly based on cursor position ---
+        (function() {
+            const bg = document.querySelector('.bg-doodles');
+            if (!bg) return;
+
+            let tmx = 0,
+                tmy = 0,
+                mx = 0,
+                my = 0;
+            let raf = null;
+
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            function onMove(e) {
+                tmx = (e.clientX / window.innerWidth - 0.5) * 2;
+                tmy = (e.clientY / window.innerHeight - 0.5) * 2;
+                if (!raf) raf = requestAnimationFrame(tick);
+            }
+
+            function tick() {
+                mx += (tmx - mx) * 0.06;
+                my += (tmy - my) * 0.06;
+                bg.style.setProperty('--mx', mx.toFixed(3));
+                bg.style.setProperty('--my', my.toFixed(3));
+                if (Math.abs(tmx - mx) > 0.001 || Math.abs(tmy - my) > 0.001) {
+                    raf = requestAnimationFrame(tick);
+                } else {
+                    raf = null;
+                }
+            }
+
+            if (!reduceMotion) {
+                window.addEventListener('mousemove', onMove, { passive: true });
+                window.addEventListener('touchmove', (e) => {
+                    if (e.touches[0]) {
+                        tmx = (e.touches[0].clientX / window.innerWidth - 0.5) * 2;
+                        tmy = (e.touches[0].clientY / window.innerHeight - 0.5) * 2;
+                        if (!raf) raf = requestAnimationFrame(tick);
+                    }
+                }, { passive: true });
+            }
+        })();
+    </script>
+
+</body>
+</html>

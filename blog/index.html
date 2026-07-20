@@ -16,7 +16,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <meta name="author" content="Gopi Malagasi" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <style>
-        * {
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -26,6 +28,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             scroll-behavior: smooth;
             scrollbar-width: thin;
             transition: background 0.35s ease, color 0.35s ease;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
         }
 
         /* --- LIGHT / DARK THEME VARIABLES --- */
@@ -136,10 +139,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
 
         body {
-            background-color: var(--bg);
+            background: var(--bg);
             color: var(--text);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+            font-size: 15px;
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            cursor: crosshair;
+            overflow-x: hidden;
+            transition: background 0.35s ease, color 0.35s ease;
         }
 
         .container {
@@ -176,20 +184,39 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
 
         .theme-toggle {
-            width: 40px;
-            height: 40px;
+            background: var(--toggle-bg);
             border: none;
-            background: transparent;
-            cursor: pointer;
-            color: var(--text);
+            border-radius: 30px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: color 0.2s ease;
+            cursor: pointer;
+            transition: background 0.25s ease, transform 0.2s ease;
+            flex-shrink: 0;
+            padding: 0;
+            position: relative;
         }
 
         .theme-toggle:hover {
-            color: var(--link-hover);
+            background: var(--toggle-hover);
+            transform: scale(1.05);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.94);
+        }
+
+        .theme-toggle svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: var(--toggle-icon);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: stroke 0.35s ease, transform 0.4s ease;
         }
 
         .blog-header {
@@ -254,12 +281,33 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
 
         footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-top: 80px;
-            padding-top: 40px;
+            padding-top: 20px;
             border-top: 1px solid var(--bg-border);
+        }
+
+        footer span {
+            color: var(--text-footer);
             font-size: 0.85rem;
-            color: var(--text-dim);
-            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-links a {
+            color: var(--text-footer);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.25s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--link-hover);
         }
 
         @media (max-width: 640px) {
@@ -269,6 +317,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
             .blog-post h2 {
                 font-size: 1.2rem;
+            }
+
+            .theme-toggle {
+                width: 38px;
+                height: 38px;
+            }
+            .theme-toggle svg {
+                width: 18px;
+                height: 18px;
             }
         }
     </style>
@@ -307,6 +364,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
             <div class="blog-list">
                 <article class="blog-post">
+                    <p class="blog-date">July 18, 2026</p>
+                    <h2>
+                        <a href="/gopimalagasi/blog/posts/yvu-security/">I Found a Massive Security Gap in Yogi Vemana University — And No Login Was Required to Grab Student Data</a>
+                    </h2>
+                </article>
+
+                <article class="blog-post">
                     <p class="blog-date">July 20, 2026</p>
                     <h2>
                         <a href="/gopimalagasi/blog/posts/first-post/">Getting Started with Security Research</a>
@@ -330,7 +394,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </main>
 
         <footer>
-            <p>&copy; 2026 Gopi Malagasi. All rights reserved.</p>
+            <span>Gopi © 2026</span>
+            <div class="footer-links">
+                <a href="mailto:gopizux@gmail.com">Mail</a>
+                <a href="https://github.com/gopizux">Github</a>
+                <a href="https://linkedin.com/in/gopizux">LinkedIn</a>
+            </div>
         </footer>
     </div>
 
