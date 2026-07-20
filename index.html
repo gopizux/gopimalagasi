@@ -1256,27 +1256,54 @@
             });
         })();
 
-        // --- Blog Navigation ---
+        // --- Blog Navigation with URL Routing ---
         (function() {
             const mainPage = document.getElementById('mainPage');
             const blogPage = document.getElementById('blogPage');
             const blogNavBtn = document.getElementById('blogNavBtn');
             const blogBackBtn = document.getElementById('blogBackBtn');
+            const basePath = '/gopimalagasi';
 
             function showBlog() {
                 mainPage.classList.add('hidden');
                 blogPage.classList.add('active');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.history.pushState({ page: 'blog' }, '', basePath + '/blog');
             }
 
             function showMain() {
                 mainPage.classList.remove('hidden');
                 blogPage.classList.remove('active');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.history.pushState({ page: 'main' }, '', basePath + '/');
+            }
+
+            function handlePopState(e) {
+                if (e.state && e.state.page === 'blog') {
+                    mainPage.classList.add('hidden');
+                    blogPage.classList.add('active');
+                } else {
+                    mainPage.classList.remove('hidden');
+                    blogPage.classList.remove('active');
+                }
+            }
+
+            function initializeFromURL() {
+                const pathname = window.location.pathname;
+                if (pathname.includes('/blog')) {
+                    mainPage.classList.add('hidden');
+                    blogPage.classList.add('active');
+                } else {
+                    mainPage.classList.remove('hidden');
+                    blogPage.classList.remove('active');
+                }
             }
 
             blogNavBtn.addEventListener('click', showBlog);
             blogBackBtn.addEventListener('click', showMain);
+            window.addEventListener('popstate', handlePopState);
+             
+            initializeFromURL();
         })();
 
         // --- Set today's date on blog post ---
