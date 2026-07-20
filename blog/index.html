@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WSMZHPK4');</script>
+<!-- End Google Tag Manager -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-site-verification" content="1fR54c0KktduXTOmcvV4cOz12C84D8WBvkkA9BQd6-Y" />
@@ -21,24 +28,111 @@
             transition: background 0.35s ease, color 0.35s ease;
         }
 
+        /* --- LIGHT / DARK THEME VARIABLES --- */
         :root {
             --bg: #0a0a0a;
             --bg-soft: #111;
             --bg-border: #222;
+            --bg-border-light: #1a1a1a;
             --text: #e0e0e0;
             --text-muted: #666;
             --text-dim: #444;
+            --text-dimmer: #333;
+            --text-footer: #333;
+            --scrollbar-track: #0a0a0a;
+            --scrollbar-thumb: #333;
+            --doodle-opacity: 0.22;
+            --doodle-opacity-dim: 0.13;
+            --doodle-grey: 0.07;
+            --hero-sub: #666;
+            --hero-strong: #888;
+            --section-label: #444;
+            --status-color: #555;
+            --dot-color: #ff4d00;
             --link-hover: #ff4d00;
+            --list-border: #1a1a1a;
+            --list-hover-bg: rgba(255, 77, 0, 0.04);
+            --info-border: #1a1a1a;
+            --info-label: #444;
+            --info-text: #666;
+            --footer-border: #222;
+            --footer-text: #333;
+            --toggle-bg: #222;
+            --toggle-hover: #333;
+            --toggle-icon: #e0e0e0;
+            --blog-bg: #0f0f0f;
+            --blog-text: #d0d0d0;
+            --blog-border: #2a2a2a;
+            --blog-heading: #fff;
+            --blog-sub: #aaa;
+            --blog-code-bg: #1a1a1a;
+            --blog-blockquote: #2a2a2a;
+            --blog-strong: #ff6a33;
         }
 
         [data-theme="light"] {
             --bg: #f5f3f0;
             --bg-soft: #edeae6;
             --bg-border: #d5d0ca;
+            --bg-border-light: #ddd8d2;
             --text: #1a1a1a;
             --text-muted: #555;
             --text-dim: #888;
+            --text-dimmer: #aaa;
+            --text-footer: #888;
+            --scrollbar-track: #f5f3f0;
+            --scrollbar-thumb: #ccc;
+            --doodle-opacity: 0.30;
+            --doodle-opacity-dim: 0.18;
+            --doodle-grey: 0.15;
+            --hero-sub: #777;
+            --hero-strong: #555;
+            --section-label: #999;
+            --status-color: #888;
+            --dot-color: #cc3d00;
             --link-hover: #cc3d00;
+            --list-border: #ddd8d2;
+            --list-hover-bg: rgba(204, 61, 0, 0.06);
+            --info-border: #ddd8d2;
+            --info-label: #999;
+            --info-text: #777;
+            --footer-border: #ddd8d2;
+            --footer-text: #999;
+            --toggle-bg: #d5d0ca;
+            --toggle-hover: #c5c0ba;
+            --toggle-icon: #1a1a1a;
+            --blog-bg: #f0ede9;
+            --blog-text: #1a1a1a;
+            --blog-border: #d5d0ca;
+            --blog-heading: #0a0a0a;
+            --blog-sub: #555;
+            --blog-code-bg: #e5e0db;
+            --blog-blockquote: #ddd8d2;
+            --blog-strong: #cc3d00;
+        }
+
+        .theme-toggle .sun-icon,
+        .theme-toggle .moon-icon {
+            position: absolute;
+            transition: opacity 0.35s ease, transform 0.4s ease;
+        }
+
+        [data-theme="dark"] .theme-toggle .sun-icon {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+        [data-theme="dark"] .theme-toggle .moon-icon {
+            opacity: 0;
+            transform: rotate(90deg) scale(0.5);
+        }
+
+        [data-theme="light"] .theme-toggle .sun-icon {
+            opacity: 0;
+            transform: rotate(-90deg) scale(0.5);
+        }
+        [data-theme="light"] .theme-toggle .moon-icon {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
         }
 
         body {
@@ -180,11 +274,28 @@
     </style>
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WSMZHPK4"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
     <div class="container">
         <header>
             <a href="/gopimalagasi/" class="back-link">← Back Home</a>
-            <button class="theme-toggle" aria-label="Toggle theme" id="themeToggle">
-                <span>🌙</span>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <svg class="sun-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="4"/>
+                    <line x1="12" y1="20" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
+                    <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="4" y2="12"/>
+                    <line x1="20" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
+                    <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+                </svg>
+                <svg class="moon-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
             </button>
         </header>
 
@@ -224,23 +335,35 @@
     </div>
 
     <script>
-        const html = document.documentElement;
-        const themeToggle = document.getElementById('themeToggle');
-        const currentTheme = localStorage.getItem('theme') || 'dark';
+        // --- Theme Toggle ---
+        (function() {
+            const toggle = document.getElementById('themeToggle');
+            const html = document.documentElement;
 
-        html.setAttribute('data-theme', currentTheme);
+            const stored = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            let currentTheme = stored || (prefersDark ? 'dark' : 'light');
 
-        themeToggle.addEventListener('click', () => {
-            const theme = html.getAttribute('data-theme');
-            const nextTheme = theme === 'light' ? 'dark' : 'light';
-            html.setAttribute('data-theme', nextTheme);
-            localStorage.setItem('theme', nextTheme);
-            themeToggle.textContent = nextTheme === 'light' ? '🌙' : '☀️';
-        });
+            function setTheme(theme) {
+                html.setAttribute('data-theme', theme);
+                currentTheme = theme;
+                localStorage.setItem('theme', theme);
+            }
 
-        if (currentTheme === 'light') {
-            themeToggle.textContent = '☀️';
-        }
+            function toggleTheme() {
+                const next = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(next);
+            }
+
+            toggle.addEventListener('click', toggleTheme);
+            setTheme(currentTheme);
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (!localStorage.getItem('theme')) {
+                    setTheme(e.matches ? 'dark' : 'light');
+                }
+            });
+        })();
     </script>
 </body>
 </html>

@@ -8,33 +8,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-WSMZHPK4');</script>
 <!-- End Google Tag Manager -->
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-WSMZHPK4');</script>
-<!-- End Google Tag Manager -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-site-verification" content="1fR54c0KktduXTOmcvV4cOz12C84D8WBvkkA9BQd6-Y" />
-    <title>Web Security Fundamentals — Gopi Malagasi</title>
-    <meta name="description" content="Essential concepts for web application security." />
+    <title>I Found a Massive Security Gap in Yogi Vemana University — Gopi Malagasi</title>
+    <meta name="description" content="A write-up about a large security gap discovered during a penetration test." />
     <meta name="author" content="Gopi Malagasi" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            scrollbar-width: thin;
-            transition: background 0.35s ease, color 0.35s ease;
-        }
-
         /* --- LIGHT / DARK THEME VARIABLES --- */
         :root {
             --bg: #0a0a0a;
@@ -254,16 +235,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
 
         .post-content code {
-            background-color: var(--code-bg);
+            background-color: var(--blog-code-bg);
             padding: 2px 6px;
             border-radius: 4px;
             font-size: 0.95em;
-            color: var(--link-hover);
+            color: var(--blog-strong);
             font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
         }
 
         .post-content pre {
-            background-color: var(--code-bg);
+            background-color: var(--blog-code-bg);
             padding: 16px 20px;
             border-radius: 8px;
             overflow-x: auto;
@@ -343,105 +324,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </header>
 
         <main>
-            <article>
-                <div class="post-header">
-                    <p class="post-date">July 15, 2026</p>
-                    <h1 class="post-title">Web Security Fundamentals</h1>
-                </div>
+            <article class="blog-post">
+                <h2>I Found a Massive Security Gap in Yogi Vemana University (www.yvu.edu.in) — And No Login Was Required to Grab Student Data</h2>
+                <span class="blog-date">July 18, 2026</span>
 
-                <div class="post-content">
-                    <p>Web security is more critical than ever. With cyber attacks becoming increasingly sophisticated, understanding the fundamental security concepts is essential for every developer and security professional.</p>
+                <p>During a recent penetration test on a state university's web infrastructure, I stumbled across some alarming security gaps. I want to share what I found to highlight how simple oversights can put real people at risk—but I'm intentionally leaving out specific names, exact URLs, and sensitive data to protect the students involved.</p>
 
-                    <h2>Common Web Vulnerabilities</h2>
-                    <p>The OWASP Top 10 outlines the most critical security risks for web applications:</p>
-                    <ul>
-                        <li><strong>SQL Injection:</strong> Injecting malicious SQL code to manipulate databases</li>
-                        <li><strong>XSS (Cross-Site Scripting):</strong> Injecting malicious scripts into web pages</li>
-                        <li><strong>CSRF (Cross-Site Request Forgery):</strong> Tricking users into making unwanted actions</li>
-                        <li><strong>Broken Authentication:</strong> Weak session management and credential exposure</li>
-                        <li><strong>Sensitive Data Exposure:</strong> Improper protection of sensitive information</li>
-                    </ul>
+                <h3>How It Started</h3>
+                <p>I was doing some routine work on a state university here in India. Like a lot of educational institutions, they've built out a pretty large web presence with different subdomains handling their main site, online education portals, and examination systems.</p>
+                <p>I started with the basics: just mapping out their attack surface to see what was publicly visible. Within minutes, I had a good picture of their setup. They were running a pretty standard tech stack—Apache, PHP, and the CodeIgniter framework. Nothing unusual at all.</p>
+                <p>Then, I started digging a little deeper, and things got messy.</p>
 
-                    <h2>Authentication Best Practices</h2>
-                    <p>Strong authentication is your first line of defense:</p>
-                    <ul>
-                        <li>Use strong password policies with minimum length requirements</li>
-                        <li>Implement multi-factor authentication (MFA) when possible</li>
-                        <li>Hash passwords using modern algorithms like bcrypt or Argon2</li>
-                        <li>Never store passwords in plain text</li>
-                        <li>Use HTTPS for all authentication endpoints</li>
-                    </ul>
+                <h3>What I Found</h3>
 
-                    <h2>Securing Your Code</h2>
-                    <p>Prevention is better than cure. Here are essential coding practices:</p>
-                    <pre><code>// ❌ Bad: SQL Injection vulnerability
-const query = "SELECT * FROM users WHERE id = " + userId;
+                <h4>1. A Student Database Left Wide Open</h4>
+                <p>This was the one that made my jaw drop.</p>
+                <p>While exploring their online education portal, I noticed an endpoint designed to let super admins export student data into a spreadsheet. The massive flaw? There was absolutely no login required to access it.</p>
+                <p>I ran a single command to request that page, and it immediately downloaded a file to my computer. It contained records for over a hundred students.</p>
+                <p>I won't go into the exact fields, but the file contained deeply personal information. I'm talking full names, phone numbers, home addresses, family details, and complete education histories. Worst of all, it included highly sensitive national ID numbers (similar to a Social Security Number).</p>
+                <p>Let that sink in for a second. With one unauthenticated click, anyone on the internet could have downloaded enough information to ruin over a hundred people's lives through identity theft.</p>
+                <p>When I looked at how this could happen, the answer was depressingly simple. In the source code, the developer had written a function to pull all the student records from the database and serve them up, but they simply forgot to add the line of code that checks if the user is actually logged in. That's it. One missing line of code.</p>
 
-// ✅ Good: Use prepared statements
-const query = "SELECT * FROM users WHERE id = ?";
-db.query(query, [userId]);</code></pre>
-
-                    <h2>HTTPS and Encryption</h2>
-                    <p>Always use HTTPS to encrypt data in transit. This protects against:</p>
-                    <ul>
-                        <li>Man-in-the-middle attacks</li>
-                        <li>Data eavesdropping</li>
-                        <li>Session hijacking</li>
-                    </ul>
-
-                    <blockquote>
-                        "Security is not a product, but a process." — Bruce Schneier
-                    </blockquote>
-
-                    <h2>Regular Security Audits</h2>
-                    <p>Continuously monitor and improve your security posture:</p>
-                    <ul>
-                        <li>Perform regular security audits and penetration testing</li>
-                        <li>Keep dependencies updated</li>
-                        <li>Use security scanning tools in your CI/CD pipeline</li>
-                        <li>Monitor for suspicious activities</li>
-                    </ul>
-
-                    <p>Remember, security is an ongoing process. Stay informed about new threats and keep improving your defenses.</p>
-                </div>
-            </article>
-        </main>
-
-        <footer>
-            <p>&copy; 2026 Gopi Malagasi. All rights reserved.</p>
-        </footer>
-    </div>
-
-    <script>
-        // --- Theme Toggle ---
-        (function() {
-            const toggle = document.getElementById('themeToggle');
-            const html = document.documentElement;
-
-            const stored = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            let currentTheme = stored || (prefersDark ? 'dark' : 'light');
-
-            function setTheme(theme) {
-                html.setAttribute('data-theme', theme);
-                currentTheme = theme;
-                localStorage.setItem('theme', theme);
-            }
-
-            function toggleTheme() {
-                const next = currentTheme === 'dark' ? 'light' : 'dark';
-                setTheme(next);
-            }
-
-            toggle.addEventListener('click', toggleTheme);
-            setTheme(currentTheme);
-
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-                if (!localStorage.getItem('theme')) {
-                    setTheme(e.matches ? 'dark' : 'light');
-                }
-            });
-        })();
-    </script>
-</body>
-</html>
+                <h4>2. Database Passwords Just Sitting There</h4>
+                <p>Next, I checked for a incredibly common mistake: looking for <code>.env</code> files. These are configuration files that tell the website how to connect to its database, and they are never supposed to be public.</p>
+... (truncated)
