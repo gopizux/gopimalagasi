@@ -915,14 +915,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 gap: 30px;
             }
             .item-meta {
-                /* Show meta on mobile and allow wrapping; stack list items vertically */
+                /* Keep meta compact on mobile; right-align and prevent wrapping */
                 display: flex;
-                width: 100%;
-                justify-content: space-between;
+                flex: 0 0 auto;
+                flex-direction: column;
+                align-items: flex-end;
+                white-space: nowrap;
+                text-align: right;
+                font-size: 0.8rem;
+                gap: 4px;
+            }
+
+            .list-item {
                 align-items: center;
-                white-space: normal;
-                text-align: left;
-                font-size: 0.85rem;
+                gap: 12px;
+            }
+
+            .item-title {
+                min-width: 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
             .doodle-mol,
             .doodle-hex,
