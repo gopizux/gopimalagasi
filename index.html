@@ -915,7 +915,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 gap: 30px;
             }
             .item-meta {
-                display: none;
+                /* Show meta on mobile and allow wrapping; stack list items vertically */
+                display: flex;
+                width: 100%;
+                justify-content: space-between;
+                align-items: center;
+                white-space: normal;
+                text-align: left;
+                font-size: 0.85rem;
             }
             .doodle-mol,
             .doodle-hex,
